@@ -5,7 +5,7 @@ add_action('the_post', 'socialDataGrabber');
 /**
  * socialDataGrabber
  * hook to get facebook and twitter social counts for each post
- * attach the data to every post using add_action('the_post', 'yeeGetSocialData');
+ * attach the data to every post using add_action('the_post', 'socialDataGrabber');
  * 
  * @access public
  * @author David Maciejewski
@@ -16,7 +16,7 @@ function socialDataGrabber($post) {
 	$permalinkUrl     = urlencode(get_permalink());
 	$transientApiKey  = 'post' . get_the_ID() . '_socialInfo';
 	$transientTimeout = (60 * 15);
-	$twitterAccount   = 'yeebase_t3n';
+	$twitterAccount   = 'macx'; // set your twitter account name
 	$postTitleLimit   = 90;
 	
 	// debug
