@@ -1,0 +1,12 @@
+h1. SocialDataGrabber
+
+p. Informationen folgen, stay tuned!
+
+h2. Folgende Versionen
+
+p. Ich baue das zunächst als einfache Funktion mit Informationen zur Installation,
+dann als WordPress-Plugin und im dritten Schritt als Stand-alone-Version für Nicht-Word-Press-Instanzen.
+
+p. Fragen? Anmerkungen? Macht doch bitte ein Ticket auf oder forked das Projekt
+
+"David Maciejewski bei Twitter":http://twitter.com/macx
