@@ -1,12 +1,23 @@
 h1. SocialDataGrabber
 
-p. Informationen folgen, stay tuned!
+p. With this WordPress function you can grab Twitter-, Facebook and Google +1-Counts/Likes to display your own
+social media buttons without the slow javascript apis from the service providers.
 
-h2. Folgende Versionen
+h2. Stay tuned or fork for the following ideas:
 
-p. Ich baue das zunächst als einfache Funktion mit Informationen zur Installation,
-dann als WordPress-Plugin und im dritten Schritt als Stand-alone-Version für Nicht-Word-Press-Instanzen.
+* build a wordpress plugin on top (optional)
+* advance setup and howto
+* embed the graphics for social media buttons
+* include css rules for styling the buttons
 
-p. Fragen? Anmerkungen? Macht doch bitte ein Ticket auf oder forked das Projekt
+h2. Quick installation
 
-"David Maciejewski bei Twitter":http://twitter.com/macx
+# Copy the content from the file functions.php in your local WordPress function.php located in wp-content/themes/YOUR-THEME-NAME/function.php
+# Setup your own Twitter-Account in functions.php: $twitterAccount = 'macx';
+# upload the folder "slots" into your theme folder located in wp-content/themes/YOUR-THEME-NAME/
+# include the following code in the file single.php located in wp-content/themes/YOUR-THEME-NAME/:
+<?php include('./slots/socialShare.php'); ?>
+
+p. Questions? Marks? Send me an mail: com@macx.de
+
+"David Maciejewski at Twitter":http://twitter.com/macx

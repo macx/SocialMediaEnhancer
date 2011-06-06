@@ -64,20 +64,41 @@ function socialDataGrabber($post) {
 		$postTitle      = get_the_title();
 		$postTitle      = preg_replace('/(&#8211;|&#8212;)/i', '-', $postTitle);
 		$postUrl        = get_permalink();
-		$postUrlEncoded = urlencode($postUrl);
+		$postUrlEncoded = ($postUrl);
 		
 		// setup twitter
 		if(strlen($postTitle) > $postTitleLimit) {
-			$twitterPostTitle = mb_substr($postTitle, 0, $postTitleLimit) . '...';
+			$twitterPostTitle = html_entity_decode(mb_substr($postTitle, 0, $postTitleLimit) . '...');
 		} else {
-			$twitterPostTitle = $postTitle;
+			$twitterPostTitle = html_entity_decode($postTitle);
 		}
 		
-		$message                            = urlencode($twitterPostTitle . ' via @') . $twitterAccount;
-		$socialInfo['twitter']['shareUrl']  = 'http://twitter.com/share?text=' .$message . '&url=' . $postUrlEncoded;
+		$message                            = urlencode($twitterPostTitle);
+		#$socialInfo['twitter']['shareUrl']  = 'http://twitter.com/share?text=' .$message . '&url=' . $postUrlEncoded . '&related=' . $twitterAccount . '&via=' . $twitterAccount;
+		$socialInfo['twitter']['shareUrl']  = 'http://twitter.com/intent/tweet?related=' . $twitterAccount . '&text=' .$message . '&url=' . $postUrlEncoded . '&via=' . $twitterAccount . '&lang=de';
 		
 		// setup facebook
 		$socialInfo['facebook']['shareUrl'] = 'http://www.facebook.com/sharer.php?u=' . $postUrlEncoded . '&t=' . urlencode($postTitle);
+		
+		// setup google +1 button
+		// see: http://code.google.com/intl/de-AT/apis/+1button/
+		$socialInfo['plusone']['shareUrl'] = 'https://plusone.google.com/u/0/+1/profile/?type=po&ru=' . $postUrlEncoded;
+		
+		$ch = curl_init();
+		curl_setopt_array($ch, array(
+			CURLOPT_URL            => 'https://clients6.google.com/rpc?key=AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ',
+			CURLOPT_POST           => 1,
+			CURLOPT_POSTFIELDS     => '[{"method":"pos.plusones.get","id":"p","params":{"nolog":true,"id":"' . $postUrl . '","source":"widget","userId":"@viewer","groupId":"@self"},"jsonrpc":"2.0","key":"p","apiVersion":"v1"}]',
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPHEADER     => array('Content-type: application/json'),
+			CURLOPT_FRESH_CONNECT  => 1,
+		));
+		$rawData = curl_exec($ch);
+		curl_close($ch);
+		
+		if($plusOneData = json_decode($rawData, true)) {
+			$socialInfo['plusone']['count'] = $plusOneData[0]['result']['metadata']['globalCounts']['count'];
+		}
 
 		// attach results to $post object
 		$post->socialInfo = $socialInfo;
