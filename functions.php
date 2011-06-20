@@ -19,7 +19,7 @@ function socialDataGrabber($post) {
 	$postTitleLimit      = 90;
 	$transientTimeout    = (60 * 15);
 	$transientApiKey     = 'post' . get_the_ID() . '_socialInfo';
-	$connectiontimeout   = 3; // set your desired connection timeout for external API calls
+	$connectionTimeout   = 3; // set your desired connection timeout for external API calls
 	
 	// debug
 	if($_GET['flushSocialGraph'] == 'flushAll') {
