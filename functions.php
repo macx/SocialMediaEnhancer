@@ -38,8 +38,8 @@ function socialDataGrabber($post) {
 		curl_setopt_array($ch, array(
 			CURLOPT_URL            => 'http://urls.api.twitter.com/1/urls/count.json?url=' . $permalinkUrl,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT        => $connectiontimeout,
-			CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
+			CURLOPT_TIMEOUT        => $connectionTimeout,
+			CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
 		));
 		$rawData = curl_exec($ch);
 		curl_close($ch);
@@ -56,8 +56,8 @@ function socialDataGrabber($post) {
 		curl_setopt_array($ch, array(
 			CURLOPT_URL            => 'http://graph.facebook.com/?ids=' . $permalinkUrl,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT        => $connectiontimeout,
-			CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
+			CURLOPT_TIMEOUT        => $connectionTimeout,
+			CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
 		));
 		$rawData = curl_exec($ch);
 		curl_close($ch);
@@ -78,8 +78,8 @@ function socialDataGrabber($post) {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPHEADER     => array('Content-type: application/json'),
 			CURLOPT_RETURNTRANSFER => 3,
-			CURLOPT_TIMEOUT        => $connectiontimeout,
-			CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
+			CURLOPT_TIMEOUT        => $connectionTimeout,
+			CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
 		));
 		$rawData = curl_exec($ch);
 		curl_close($ch);
