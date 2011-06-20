@@ -19,6 +19,7 @@ function socialDataGrabber($post) {
 	$postTitleLimit      = 90;
 	$transientTimeout    = (60 * 15);
 	$transientApiKey     = 'post' . get_the_ID() . '_socialInfo';
+	$connectiontimeout   = 3; // set your desired connection timeout for external API calls
 	
 	// debug
 	if($_GET['flushSocialGraph'] == 'flushAll') {
@@ -32,11 +33,16 @@ function socialDataGrabber($post) {
 	} else {
 		$socialInfo = array();
 		
-		// set timeout
-		$context = stream_context_create(array('http' => array('timeout' => 3)));
-		
 		// get count data from twitter
-		$rawData = file_get_contents('http://urls.api.twitter.com/1/urls/count.json?url=' . $permalinkUrl, 0, $context);
+		$ch = curl_init();
+		curl_setopt_array($ch, array(
+			CURLOPT_URL            => 'http://urls.api.twitter.com/1/urls/count.json?url=' . $permalinkUrl,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => $connectiontimeout,
+			CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
+		));
+		$rawData = curl_exec($ch);
+		curl_close($ch);
 		
 		if($twitterData = json_decode($rawData)) {
 			$socialInfo['twitter']['count'] = intval($twitterData->count);
@@ -46,7 +52,15 @@ function socialDataGrabber($post) {
 		
 		// get count data from facebook
 		// see: https://developers.facebook.com/docs/reference/api/
-		$rawData = file_get_contents('http://graph.facebook.com/?ids=' . $permalinkUrl, 0, $context);
+		$ch = curl_init();
+		curl_setopt_array($ch, array(
+			CURLOPT_URL            => 'http://graph.facebook.com/?ids=' . $permalinkUrl,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => $connectiontimeout,
+			CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
+		));
+		$rawData = curl_exec($ch);
+		curl_close($ch);
 		
 		if($facebookData = json_decode($rawData, true)) {
 			$socialInfo['facebook']['count'] = intval($facebookData[$permalinkUrl]['shares']);
@@ -64,8 +78,8 @@ function socialDataGrabber($post) {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPHEADER     => array('Content-type: application/json'),
 			CURLOPT_RETURNTRANSFER => 3,
-			CURLOPT_TIMEOUT        => 3,
-			CURLOPT_CONNECTTIMEOUT => 3
+			CURLOPT_TIMEOUT        => $connectiontimeout,
+			CURLOPT_CONNECTTIMEOUT => $connectiontimeout,
 		));
 		$rawData = curl_exec($ch);
 		curl_close($ch);
