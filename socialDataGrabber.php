@@ -177,8 +177,6 @@ class socialDataGrabber {
 			// attach results to $post object
 			$post->socialInfo = $socialInfo;
 
-			$oObj = $socialInfo; echo '<pre style="border: 2px solid red; padding: 5px; background: #fff; color: #333; margin: 0 0 10px 0;">' . print_r($oObj, 1) . '</pre>';
-
 			// save result in api
 			set_transient($transientApiKey, $socialInfo, $transientTimeout);
 		}
@@ -186,7 +184,7 @@ class socialDataGrabber {
 
 	public function addSocialBar($content) {
 		global $post;
-		
+
 		include_once 'templates/socialShare.php';
 
 		return $content;
