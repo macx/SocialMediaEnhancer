@@ -15,9 +15,6 @@ class socialDataGrabber {
 	}
 
 	public function setImageSize() {
-		// regular thumbnail
-		set_post_thumbnail_size(150, 90, true);
-
 		// specific image sizes
 		add_image_size('socialShareSmall', 100, 57, true);
 		add_image_size('socialShareBig', 400, 225, true);
