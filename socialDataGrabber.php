@@ -185,7 +185,7 @@ class socialDataGrabber {
 	public function addSocialBar($content) {
 		global $post;
 
-		include_once 'templates/socialShare.php';
+		include 'templates/socialShare.php';
 
 		return $content;
 	}
