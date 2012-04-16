@@ -1,15 +1,15 @@
 <?php
 /*
-Plugin Name: SocialDataGrabber
-Plugin URI: https://github.com/macx/SocialDataGrabber
-Description: Smart social button integration and counter
-Version: 1.0
-Update: 2012-01-09
+Plugin Name: SocialMediaEnhancer
+Plugin URI: https://github.com/macx/SocialMediaEnhancer
+Description: WprdPress PLugin to enhance your blog
+Version: 1.5
+Update: 2012-04-16
 Author: David Maciejewski
-Author URI: http://macx.de
+Author URI: http://macx.de/+
 */
 
-class socialDataGrabber {
+class SocialMediaEnhancer {
 	public function __construct() {
 		add_theme_support('post-thumbnails');
 	}
@@ -66,9 +66,9 @@ class socialDataGrabber {
 	}
 
 	/**
-	* socialDataGrabber
+	* SocialMediaEnhancer
 	* hook to get facebook and twitter social counts for each post
-	* attach the data to every post using add_action('the_post', 'socialDataGrabber');
+	* attach the data to every post using add_action('the_post', 'SocialMediaEnhancer');
 	*
 	* @access public
 	* @author David Maciejewski
@@ -189,9 +189,9 @@ class socialDataGrabber {
 
 	public function includeStylesheet() {
 		// Load stylesheet
-		$cssPath = plugins_url('socialDataGrabber/sdg.css');
+		$cssPath = plugins_url('socialMediaEnhancer/sdg.css');
 
-		wp_enqueue_style('socialDataGrabber', $cssPath, '', '1.0');
+		wp_enqueue_style('socialMediaEnhancer', $cssPath, '', '1.0');
 	}
 }
 
@@ -201,13 +201,13 @@ if(function_exists('add_theme_support')) {
 }
 
 // set meta data
-add_action('wp_head', array('socialDataGrabber', 'setMetaData'));
+add_action('wp_head', array('socialMediaEnhancer', 'setMetaData'));
 
-add_filter('the_content', array('socialDataGrabber', 'addSocialBar'));
+add_filter('the_content', array('socialMediaEnhancer', 'addSocialBar'));
 
-add_action('init', array('socialDataGrabber', 'setImageSize'));
+add_action('init', array('socialMediaEnhancer', 'setImageSize'));
 
-add_action('the_post', array('socialDataGrabber', 'getSocialData'));
+add_action('the_post', array('socialMediaEnhancer', 'getSocialData'));
 
-add_action('wp_enqueue_scripts', array('socialDataGrabber', 'includeStylesheet'));
+add_action('wp_enqueue_scripts', array('socialMediaEnhancer', 'includeStylesheet'));
 
