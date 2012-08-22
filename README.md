@@ -5,7 +5,7 @@ It's provide a well formed title, description and a new thumbnail from your post
 
 ## Quick installation
 
-1. Upload the files to your WordPress Blogs theme folder and put it into wp-content/themes/SocialMediaEnhancer
+1. Upload the files to your WordPress Blogs theme folder and put it into wp-content/plugins/SocialMediaEnhancer
 2. Activate this Plugin in the WordPress-Backend
 
 ## Questions? Marks?
