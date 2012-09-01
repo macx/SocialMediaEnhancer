@@ -189,7 +189,7 @@ class SocialMediaEnhancer {
 
 	public function includeStylesheet() {
 		// Load stylesheet
-		$cssPath = plugins_url('socialMediaEnhancer/sdg.css');
+		$cssPath = plugins_url( 'sdg.css', __FILE__ );
 
 		wp_enqueue_style('socialMediaEnhancer', $cssPath, '', '1.0');
 	}
