@@ -2,7 +2,7 @@
 /*
 Plugin Name: SocialMediaEnhancer
 Plugin URI: https://github.com/macx/SocialMediaEnhancer
-Description: WprdPress PLugin to enhance your blog
+Description: Smart social button integration and counter
 Version: 1.6
 Update: 2012-04-16
 Author: David Maciejewski
@@ -35,15 +35,16 @@ class SocialMediaEnhancer {
 		}
 
 		// set meta data
-		add_action('wp_head', array(&$this, 'setMetaData'));
 
 		add_filter('the_content', array(&$this, 'addSocialBar'));
 
-		add_action('init', array(&$this, 'setImageSize'));
-
+		add_action('init', array(&$this, 'smeInit'));
+		add_action('wp_head', array(&$this, 'setMetaData'));
 		add_action('the_post', array(&$this, 'getSocialData'));
+		add_action('get_the_post', array(&$this, 'getSocialData'));
+		add_action('wp_enqueue_scripts', array(&$this, 'includeScripts'));
 
-		add_action('wp_enqueue_scripts', array(&$this, 'includeStylesheet'));
+		add_shortcode('socialMediaEnhancer', array(&$this, 'smeShortcode'));
 
 		add_theme_support('post-thumbnails');
 
@@ -51,15 +52,36 @@ class SocialMediaEnhancer {
 		add_action('admin_menu', array(&$this, 'smeMenu'));
 		add_action('admin_init', array(&$this, 'smeRegisterSettings'));
 
-		$this->options = get_option('smeOptions');
+		if(is_admin()) {
+			register_activation_hook(__FILE__, array(&$this, 'smeOptionDefaults'));
+		}
+
+		$this->options = get_option('smeOptions', array(
+			'general' => array(
+				'services' => array(
+					'google'   => 1,
+					'facebook' => 1,
+					'twitter'  => 1
+				),
+				'style' => 'light',
+				'embed' => 'begin'
+			)
+		));
 	}
 
-	public function setImageSize() {
+	public function smeInit() {
 		// specific image sizes
 		add_image_size('socialShareSmall', 100, 57, true);
 		add_image_size('socialShareBig', 400, 225, true);
+
+		// i18n
+		load_plugin_textdomain('socialMediaEnhancer', false, 'socialMediaEnhancer/languages' );
 	}
 
+	public function smeOptionDefaults() {
+		update_option('sdgOptions', $this->options);
+	}
+	
 	function setMetaData() {
 		global $post;
 
@@ -78,6 +100,9 @@ class SocialMediaEnhancer {
 			$url         = get_permalink($post->ID);
 			$moreTagPos  = strpos($post->post_content, '<!--more');
 			$description = substr($post->post_content, 0, $moreTagPos);
+			if($post->post_excerpt) {
+				$description = $post->post_excerpt;
+			}
 
 			if(function_exists('has_post_thumbnail') && has_post_thumbnail($post->ID)) {
 				$postImageData = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'socialShareBig');
@@ -116,13 +141,12 @@ class SocialMediaEnhancer {
 	* @return void
 	*/
 	function getSocialData($post) {
-		$options             = get_option('smeOptions');
-
-		$twitterAccount      = $options['accounts']['twitter'];
+		$twitterAccount      = $this->options['accounts']['twitter'];
 		$permalinkUrl        = get_permalink();
 		$permalinkUrlEncoded = urlencode($permalinkUrl);
 		$postTitle           = get_the_title();
 		$postTitle           = preg_replace('/(&#8211;|&#8212;)/i', '-', $postTitle);
+		$postTitleEncoded    = urlencode($postTitle);
 		$postTitleLimit      = 90;
 		$transientTimeout    = (60 * 15);
 		$transientApiKey     = 'post' . get_the_ID() . '_socialInfo';
@@ -192,9 +216,9 @@ class SocialMediaEnhancer {
 			curl_close($ch);
 
 			if($plusOneData = json_decode($rawData, true)) {
-				$socialInfo['googleplus']['count'] = intval($plusOneData[0]['result']['metadata']['globalCounts']['count']);
+				$socialInfo['google']['count'] = intval($plusOneData[0]['result']['metadata']['globalCounts']['count']);
 			} else {
-				$socialInfo['googleplus']['count'] = intval(0);
+				$socialInfo['google']['count'] = intval(0);
 			}
 
 			// get count data from linkedin
@@ -230,7 +254,11 @@ class SocialMediaEnhancer {
 			$socialInfo['facebook']['shareUrl'] = 'http://www.facebook.com/sharer.php?u=' . $permalinkUrl . '&t=' . urlencode($postTitle);
 
 			// setup google +1 button
-			$socialInfo['googleplus']['shareUrl'] = 'https://plusone.google.com/u/0/+1/profile/?type=po&ru=' . $permalinkUrl;
+			$socialInfo['google']['shareUrl']   = 'https://plus.google.com/share?url=' . $permalinkUrl;
+
+			// setup linkedin button
+			// @see https://developer.linkedin.com/documents/share-linkedin
+			$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&url=' . $permalinkUrlEncoded . '&title=' . $postTitleEncoded;
 
 			// attach results to $post object
 			$post->socialInfo = $socialInfo;
@@ -259,14 +287,31 @@ class SocialMediaEnhancer {
 		return $content;
 	}
 
-	public function includeStylesheet() {
-		// Load stylesheet
-		$cssPath = plugins_url( 'sdg.css', __FILE__ );
+	public function includeScripts() {
+		$pluginPath = $this->pluginUrl . '/assets/';
 
-		wp_enqueue_style('socialMediaEnhancer', $cssPath, '', '1.0');
+		wp_enqueue_style('smeStyle', $pluginPath . 'sme.css', '', '1.0');
+		wp_enqueue_script('smeScript', $pluginPath . 'sme.js', '', '1.0');
 	}
 
+	public function smeShortcode($attr, $content = '') {
+		global $post, $wp_locale;
 
+		static $instance = 0;
+		$instance++;
+
+		extract(shortcode_atts(array(
+			'theme' => 'light'
+		), $attr));
+
+		ob_start();
+		include 'templates/socialShare.php';
+		$buttons = ob_get_contents();
+		$output  = "\n" . $buttons . "\n";
+		ob_end_clean();
+
+		return $output;
+	}
 
 	/**
 	 * Register Options Page Settings
@@ -288,8 +333,6 @@ class SocialMediaEnhancer {
 		if(!current_user_can('manage_options')) {
 			wp_die(__('You do not have sufficient permissions to access this page.'));
 		}
-
-		$options = get_option('smeOptions');
 
 		include_once $this->pluginPath . '/templates/options.php';
 	}
