@@ -91,7 +91,6 @@ class SocialMediaEnhancer {
 		$type        = 'website';
 		$url         = get_bloginfo('url');
 		$description = get_bloginfo('description');
-		$image       = get_template_directory_uri() . '/images/share.jpg';
 
 		// override in single view
 		if(is_singular()) {
@@ -112,6 +111,14 @@ class SocialMediaEnhancer {
 					$imageWidth  = $postImageData[1];
 					$imageHeight = $postImageData[2];
 				}
+			}
+		}
+
+		if(!$image) {
+			if($headerImage = get_header_image()) {
+				$image = $headerImage;
+			} else {
+				$image = $this->pluginUrl . '/images/smeShare.png';
 			}
 		}
 

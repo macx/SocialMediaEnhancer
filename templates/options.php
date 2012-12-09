@@ -93,19 +93,28 @@
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
-					<th scope="row">Google+</th>
+					<th scope="row">
+						Google+<br>
+						<small>(Vollständige URL)</small>
+					</th>
 					<td>
-						<input type="text" name="smeOptions[accounts][google]" value="<?php echo $this->options['accounts']['google']; ?>" class="regular-text ltr" placeholder="macx" />
+						<input type="text" name="smeOptions[accounts][google]" value="<?php echo $this->options['accounts']['google']; ?>" class="regular-text ltr" placeholder="https://plus.google.com/102458928073783517690" />
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Facebook</th>
+					<th scope="row">
+						Facebook<br>
+						<small>(Vollständige URL)</small>
+					</th>
 					<td>
-						<input type="text" name="smeOptions[accounts][facebook]" value="<?php echo $this->options['accounts']['facebook']; ?>" class="regular-text ltr" placeholder="macx" />
+						<input type="text" name="smeOptions[accounts][facebook]" value="<?php echo $this->options['accounts']['facebook']; ?>" class="regular-text ltr" placeholder="https://www.facebook.com/dmacx" />
 					</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Twitter</th>
+					<th scope="row">
+						Twitter-Username
+						<small>(without @)</small>
+					</th>
 					<td>
 						<input type="text" name="smeOptions[accounts][twitter]" value="<?php echo $this->options['accounts']['twitter']; ?>" class="regular-text ltr" placeholder="macx" />
 					</td>
