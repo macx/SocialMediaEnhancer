@@ -99,19 +99,38 @@ class SocialMediaEnhancer {
 			$url         = get_permalink($post->ID);
 			$moreTagPos  = strpos($post->post_content, '<!--more');
 			$description = substr($post->post_content, 0, $moreTagPos);
+			$description = strip_shortcodes($description);
+
 			if($post->post_excerpt) {
 				$description = $post->post_excerpt;
 			}
 
 			if(function_exists('has_post_thumbnail') && has_post_thumbnail($post->ID)) {
-				$postImageData = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'socialShareBig');
+				$postImagesSizes = array('preview', 'large');
+				$images          = array();
 
-				if($postImage = esc_attr($postImageData[0])) {
-					$image       = $postImage;
-					$imageWidth  = $postImageData[1];
-					$imageHeight = $postImageData[2];
+				foreach($postImagesSizes AS $size) {
+					$postImageData = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), $size);
+
+					if($postImage = esc_attr($postImageData[0])) {
+						$images[] = array(
+							'url'    => $postImage,
+							'width'  => $postImageData[1],
+							'height' => $postImageData[2]
+						);
+					}
+				}
+				
+				// overwrite description on single image view
+				if($post->post_parent != 0) {
+					$title        = trim(substr($post->post_content, 0, 70)) . '&#8230;';
+					$description  = $post->post_content;
 				}
 			}
+
+			// embedded youtube
+			$youtubeId = get_post_custom_values('youtube', false);
+			$youtubeId = $youtubeId[0];
 		}
 
 		if(!$image) {
@@ -127,6 +146,22 @@ class SocialMediaEnhancer {
 		echo '<meta property="og:url" content="' . $url . '">' . "\n\t";
 		echo '<meta property="og:site_name" content="' . $blogTitle . '">' . "\n\t";
 		echo '<meta property="og:description" content="' . strip_tags($description) . '">' . "\n\t";
+		if(!empty($images)) {
+			$n = 0;
+			foreach($images AS $image) {
+				echo '<meta property="og:image" content="' . $image['url'] . '">' . "\n\t";
+				echo '<meta property="og:image:width" content="' . $image['width'] . '">' . "\n\t";
+				echo '<meta property="og:image:height" content="' . $image['height'] . '">' . "\n\t";
+
+				if($n == 0) {
+					echo '<link rel="image_src" href="' . $image['url'] . '">' . "\n";
+				}
+				$n++;
+			}
+		} else {
+			echo '<link rel="image_src" href="' . $image . '">' . "\n";
+		}
+
 		echo '<meta property="og:image" content="' . $image . '">' . "\n\t";
 		if(isset($imageWidth)) {
 			echo '<meta property="og:image:width" content="' . $imageWidth . '">' . "\n\t";
