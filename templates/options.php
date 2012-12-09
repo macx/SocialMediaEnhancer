@@ -25,24 +25,23 @@
 						<fieldset>
 							<legend class="screen-reader-text"><span>Social-Media-Dienste</span></legend>
 
-							<label for="default_pingback_flag">
-								<input name="smeOptions[general][services][google]" type="checkbox" id="default_pingback_flag" value="1"<?php if($this->options['general']['services']['google'] == 1) echo ' checked="checked"'; ?>>
+							<label for="service_google">
+								<input name="smeOptions[general][services][google]" type="checkbox" id="service_google" value="1"<?php if($this->options['general']['services']['google'] == 1) echo ' checked="checked"'; ?>>
 								Google+
 							</label><br>
 
-							<label for="default_ping_status">
-								<input name="smeOptions[general][services][facebook]" type="checkbox" id="default_ping_status" value="1"<?php if($this->options['general']['services']['facebook'] == 1) echo ' checked="checked"'; ?>>
+							<label for="service_facebook">
+								<input name="smeOptions[general][services][facebook]" type="checkbox" id="service_facebook" value="1"<?php if($this->options['general']['services']['facebook'] == 1) echo ' checked="checked"'; ?>>
 								Facebook+
 							</label><br>
 
-							<label for="default_comment_status">
-								<input name="smeOptions[general][services][twitter]" type="checkbox" id="default_comment_status" value="1"<?php if($this->options['general']['services']['twitter'] == 1) echo ' checked="checked"'; ?>>
+							<label for="service_twitter">
+								<input name="smeOptions[general][services][twitter]" type="checkbox" id="service_twitter" value="1"<?php if($this->options['general']['services']['twitter'] == 1) echo ' checked="checked"'; ?>>
 								Twitter
 							</label><br>
 
-
-							<label for="default_comment_status">
-								<input name="smeOptions[general][services][linkedin]" type="checkbox" id="default_comment_status"<?php if($this->options['general']['services']['linkedin'] == 1) echo ' checked="checked"'; ?>>
+							<label for="service_linkedin">
+								<input name="smeOptions[general][services][linkedin]" type="checkbox" id="service_linkedin"<?php if($this->options['general']['services']['linkedin'] == 1) echo ' checked="checked"'; ?>>
 								LinkedIn
 							</label><br>
 
