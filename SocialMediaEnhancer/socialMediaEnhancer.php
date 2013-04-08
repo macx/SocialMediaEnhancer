@@ -23,11 +23,10 @@ class SocialMediaEnhancer {
 	public function __construct() {
 		global $wpdb;
 
-		$this->wpdb = &$wpdb;
-
+		$this->wpdb       = &$wpdb;
 		$this->pluginPath = dirname(__FILE__);
-
-		$this->pluginUrl = WP_PLUGIN_URL . '/SocialMediaEnhancer';
+		$this->pluginUrl  = WP_PLUGIN_URL . '/SocialMediaEnhancer';
+		$this->pluginName = plugin_basename(__FILE__);
 
 		// add theme support and  thumbs
 		if(function_exists('add_theme_support')) {
@@ -37,6 +36,7 @@ class SocialMediaEnhancer {
 		// set meta data
 
 		add_filter('the_content', array(&$this, 'addSocialBar'));
+		add_filter('plugin_action_links_' . $this->pluginName, array(&$this, 'smeOptionsLink'));
 
 		add_action('init', array(&$this, 'smeInit'));
 		add_action('wp_head', array(&$this, 'setMetaData'));
@@ -161,15 +161,6 @@ class SocialMediaEnhancer {
 		} else {
 			echo '<link rel="image_src" href="' . $image . '">' . "\n";
 		}
-
-		echo '<meta property="og:image" content="' . $image . '">' . "\n\t";
-		if(isset($imageWidth)) {
-			echo '<meta property="og:image:width" content="' . $imageWidth . '">' . "\n\t";
-		}
-		if(isset($imageHeight)) {
-			echo '<meta property="og:image:height" content="' . $imageHeight . '">' . "\n\t";
-		}
-		echo '<link rel="image_src" href="' . $image . '">' . "\n\n";
 	}
 
 	/**
@@ -381,6 +372,12 @@ class SocialMediaEnhancer {
 
 	public function smeOptionsValidate($input) {
 		return $input;
+	}
+
+	public function smeOptionsLink($links) {
+		$optionsLink = sprintf('<a href="options-general.php?page=%s">%s</a>', $this->pluginName, __('Settings'));
+		array_unshift($links, $optionsLink);
+		return $links;
 	}
 }
 

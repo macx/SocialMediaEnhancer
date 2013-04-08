@@ -7,8 +7,8 @@ It also adds static Social Media Buttons for sharing your post – without the 
 
 ## Quick installation
 
-1. Download the zip.
-2. Upload the files to your WordPress Blog plugin folder and put it into wp-content/plugins/SocialMediaEnhancer.
+1. Download the zip and extract it.
+2. Upload the folder "SocialMediaEnhancer" to your WordPress Blog plugin folder at wp-content/plugins.
 3. Activate this Plugin in the WordPress-Backend.
 3. Visit the options page in WordPress to setup the plugin to work properly.
 
