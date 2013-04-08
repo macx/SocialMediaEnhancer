@@ -23,10 +23,12 @@ class SocialMediaEnhancer {
 	public function __construct() {
 		global $wpdb;
 
-		$this->wpdb       = &$wpdb;
-		$this->pluginPath = dirname(__FILE__);
-		$this->pluginUrl  = WP_PLUGIN_URL . '/SocialMediaEnhancer';
-		$this->pluginName = plugin_basename(__FILE__);
+		$this->wpdb             = &$wpdb;
+		$this->pluginPath       = dirname(__FILE__);
+		$this->pluginBaseName   = plugin_basename(__FILE__);
+		$this->pluginBaseFolder = plugin_basename(dirname(__FILE__));
+		$this->pluginFileName   = str_replace($this->pluginBaseFolder . '/', '', $this->pluginBaseName);
+		$this->pluginUrl        = WP_PLUGIN_URL . '/' . $this->pluginBaseFolder;
 
 		// add theme support and  thumbs
 		if(function_exists('add_theme_support')) {
@@ -34,9 +36,8 @@ class SocialMediaEnhancer {
 		}
 
 		// set meta data
-
 		add_filter('the_content', array(&$this, 'addSocialBar'));
-		add_filter('plugin_action_links_' . $this->pluginName, array(&$this, 'smeOptionsLink'));
+		add_filter('plugin_row_meta', array(&$this, 'smeOptionsLink'), 10, 2);
 
 		add_action('init', array(&$this, 'smeInit'));
 		add_action('wp_head', array(&$this, 'setMetaData'));
@@ -355,7 +356,7 @@ class SocialMediaEnhancer {
 
 	public function smeMenu() {
 		// Add a submenu under Settings
-		add_options_page(__('SocialMediaEnhancer Settings', 'smeOptionsTitle'), __('SocialMediaEnhancer', 'smeOptionsMenuTitle'), 'manage_options', 'sme-options', array(&$this, 'smeOptionsPage'));
+		add_options_page(__('SocialMediaEnhancer Settings', 'smeOptionsTitle'), __('SocialMediaEnhancer', 'smeOptionsMenuTitle'), 'manage_options', $this->pluginBaseName, array(&$this, 'smeOptionsPage'));
 	}
 
 	/**
@@ -374,9 +375,14 @@ class SocialMediaEnhancer {
 		return $input;
 	}
 
-	public function smeOptionsLink($links) {
-		$optionsLink = sprintf('<a href="options-general.php?page=%s">%s</a>', $this->pluginName, __('Settings'));
-		array_unshift($links, $optionsLink);
+	public function smeOptionsLink($links, $file) {
+		if($file == $this->pluginBaseName) {
+			return array_merge(
+				$links,
+				array(sprintf('<a href="options-general.php?page=%s">%s</a>', $this->pluginBaseName, __('Settings')))
+			);
+		}
+
 		return $links;
 	}
 }
