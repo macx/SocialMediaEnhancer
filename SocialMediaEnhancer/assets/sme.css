@@ -1,0 +1,216 @@
+/* sme share box
+************************************************/
+
+.smeShare {
+	margin: 0 0 15px 0;
+	overflow: hidden;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+/* classic buttons
+************************************************/
+
+[class^="smeClassicBtn"],
+[class*="smeClassicBtn"] {
+	display: block;
+	float: left;
+	overflow: hidden;
+	margin: 0 10px 0 0;
+	color: #555;
+	text-decoration: none;
+}
+
+[class^="smeClassicBtn"] b,
+[class^="smeClassicBtn"] i,
+[class^="smeClassicBtn"] i span {
+	background: url(../images/socialShare.png) no-repeat 0 -40px;
+}
+
+.smeClassicBtnTwitter b  { background-position:    0   -40px; }
+.smeClassicBtnFacebook b { background-position:  -67px -40px; }
+.smeClassicBtnGoogle b   { background-position: -134px -40px; }
+
+.smeDark .smeClassicBtnTwitter b  { background-position:    0   -80px; }
+.smeDark .smeClassicBtnFacebook b { background-position:  -67px -80px; }
+.smeDark .smeClassicBtnGoogle b   { background-position: -134px -80px; }
+
+.smeClassicBtnTwitter b:hover, .smeClassicBtnTwitter b:focus   { background-position:    0   -60px; }
+.smeClassicBtnFacebook b:hover, .smeClassicBtnFacebook b:focus { background-position:  -67px -60px; }
+.smeClassicBtnGoogle b:hover, .smeClassicBtnGoogle b:focus     { background-position: -134px -60px; }
+
+.smeDark .smeClassicBtnTwitter b:hover, .smeDark .smeClassicBtnTwitter b:focus   { background-position:   0    -100px; }
+.smeDark .smeClassicBtnFacebook b:hover, .smeDark .smeClassicBtnFacebook b:focus { background-position:  -67px -100px; }
+.smeDark .smeClassicBtnGoogle b:hover, .smeDark .smeClassicBtnGoogle b:focus     { background-position: -134px -100px; }
+
+[class^="smeClassicBtn"] b,
+[class*="smeClassicBtn"] b {
+	display: block;
+	float: left;
+	width: 67px;
+	height: 20px;
+	text-indent: -200em;
+}
+
+[class^="smeClassicBtn"] i,
+[class*="smeClassicBtn"] i {
+	display: block;
+	float: left;
+	width: auto;
+	height: 20px;
+	background-position: -201px -40px;
+	margin: 0 0 0 2px;
+}
+
+.smeDark [class^="smeClassicBtn"] i,
+.smeDark [class*="smeClassicBtn"] i {
+	background-position: -201px -80px;
+}
+
+[class^="smeClassicBtn"] i span,
+[class*="smeClassicBtn"] i span {
+	display: block;
+	float: left;
+	width: auto;
+	height: 20px;
+	background-position: 100% -40px;
+	margin: 0 0 0 8px;
+	padding: 0 8px 0 4px;
+}
+
+.smeDark [class^="smeClassicBtn"] i span,
+.smeDark [class*="smeClassicBtn"] i span {
+	background-position: 100% -80px;
+}
+
+/* modern button
+************************************************/
+
+[class^="smeBtn"],
+[class*="smeBtn"] {
+	display: -moz-inline-stack;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	box-sizing: border-box;
+	color: #fff !important;
+	cursor: pointer;
+	text-decoration: none !important;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	font-family: 'Droid Sans',sans-serif,Arial,Helvetica;
+	font-size: 12px;
+	font-weight: 700;
+	vertical-align: baseline;
+	-webkit-font-smoothing: antialiased;
+	line-height: 24px;
+	margin: 0 5px 0 0;
+	padding: 0 10px !important;
+	white-space: nowrap;
+
+	background: #f5f5f5;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
+	background: -webkit-linear-gradient(top, #fff, #eee);
+	background: -moz-linear-gradient(top, #fff, #eee);
+	background: -ms-linear-gradient(top, #fff, #eee);
+	background: -o-linear-gradient(top, #fff, #eee);
+	background: linear-gradient(to bottom, #fff, #eee);
+
+	border: solid 1px #bbb;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+
+	-webkit-transition: border-color .218s;
+	-moz-transition: border .218s;
+	-o-transition: border-color .218s;
+	transition: border-color .218s;
+}
+
+[class^="smeBtn"]:last-child,
+[class*="smeBtn"]:last-child {
+	margin: 0;
+}
+
+[class^="smeBtn"]:hover,
+[class*="smeBtn"]:focus,
+[class^="smeBtn"]:hover,
+[class*="smeBtn"]:focus {
+	border-color: rgba(0, 0, 0, 0.5);
+}
+
+[class^="smeBtn"]:active,
+[class*="smeBtn"]:active {
+	position: relative;
+	top: 1px;
+	border-color: rgba(0, 0, 0, 0.5);
+}
+
+.smeBtnGoogle {
+	background: -moz-linear-gradient(top, #da4a38 0%, #a6281a 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #da4a38), color-stop(100%, #a6281a));
+	background: -webkit-linear-gradient(top, #da4a38 0%, #a6281a 100%);
+	background: -o-linear-gradient(top, #da4a38 0%, #a6281a 100%);
+	background: -ms-linear-gradient(top, #da4a38 0%, #a6281a 100%);
+	background: linear-gradient(to bottom, #da4a38 0%, #a6281a 100%);
+	border-color: #92190c;
+}
+
+.smeBtnTwitter {
+	background: -moz-linear-gradient(top, #70b4df 0%, #1877b8 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #70b4df), color-stop(100%, #1877b8));
+	background: -webkit-linear-gradient(top, #70b4df 0%, #1877b8 100%);
+	background: -o-linear-gradient(top, #70b4df 0%, #1877b8 100%);
+	background: -ms-linear-gradient(top, #70b4df 0%, #1877b8 100%);
+	background: linear-gradient(to bottom, #70b4df 0%, #1877b8 100%);
+	border-color: #065ca6;
+}
+
+.smeBtnFacebook {
+	background: -moz-linear-gradient(top, #5b73a6 0%, #234a88 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5b73a6), color-stop(100%, #234a88));
+	background: -webkit-linear-gradient(top, #5b73a6 0%, #234a88 100%);
+	background: -o-linear-gradient(top, #5b73a6 0%, #234a88 100%);
+	background: -ms-linear-gradient(top, #5b73a6 0%, #234a88 100%);
+	background: linear-gradient(to bottom, #5b73a6 0%, #234a88 100%);
+	border-color: #14326d;
+}
+
+/* modern button icons
+************************************************/
+
+[class^="smeIcon"],
+[class*="smeIcon"] {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	line-height: 14px;
+	vertical-align: text-top;
+	background-image: url(../images/smeIcons.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	margin-right: 5px;
+}
+
+.smeIconGoogle     { background-position: 0 0; }
+.smeIconFacebook   { background-position: -24px 0; }
+.smeIconTwitter    { background-position: -48px 0; }
+
+.smeIconGoogle.smeWhite   { background-position: -72px 0; }
+.smeIconFacebook.smeWhite { background-position: -96px 0; }
+.smeIconTwitter.smeWhite  { background-position: -120px 0; }
+
+@media only screen and (min-device-pixel-ratio: 2),
+(-webkit-min-device-pixel-ratio: 2),
+(min--moz-device-pixel-ratio: 2) {
+	[class^="social-"], [class*=" social-"] {
+		background-size: 109px 26px;
+	}
+
+	.smeIconGoogle     { background-position: 0 -24px; }
+	.smeIconFacebook   { background-position: -19px -24px; }
+	.smeIconTwitter    { background-position: -38px -24px; }
+
+	.smeIconGoogle.smeWhite   { background-position: -57px -12px; }
+	.smeIconFacebook.smeWhite { background-position: -76px -12px; }
+	.smeIconTwitter.smeWhite  { background-position: -95px -12px; }
+}
