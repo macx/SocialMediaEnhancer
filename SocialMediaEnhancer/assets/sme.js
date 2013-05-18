@@ -1,6 +1,6 @@
 ;(function($, window, document, undefined){
 	$(document).ready(function(){
-		$('.smeSocial a').bind('click', function(e){
+		$('a[rel~=sme]').bind('click', function(e){
 			e.preventDefault();
 
 			var link        = $(this),
@@ -29,6 +29,8 @@
 			if(typeof _gaq != 'undefined') {
 				_gaq.push(['_trackSocial', smeServices[service].site, smeServices[service].action]);
 			}
+
+			window.open(href, title, 'toolbar=no, width=650, height=450');
 		});
 	});
 })(jQuery, window, document);

@@ -3,7 +3,7 @@
 Plugin Name: SocialMediaEnhancer
 Plugin URI: https://github.com/macx/SocialMediaEnhancer
 Description: Smart social button integration and counter
-Version: 1.7
+Version: 1.7.1
 Update: 2013-05-18
 Author: David Maciejewski
 Author URI: http://macx.de/+
@@ -391,7 +391,7 @@ class SocialMediaEnhancer {
 		$pluginPath = $this->pluginUrl . '/assets/';
 
 		wp_enqueue_style('smeStyle', $pluginPath . 'sme.css', '', '1.0');
-		wp_enqueue_script('smeScript', $pluginPath . 'sme.js', '', '1.0');
+		wp_enqueue_script('smeScript', $pluginPath . 'sme.js', array('jquery'), '1.0');
 	}
 
 	public function smeShortcode($attr, $content = '') {
