@@ -3,7 +3,7 @@
 Plugin Name: SocialMediaEnhancer
 Plugin URI: https://github.com/macx/SocialMediaEnhancer
 Description: Smart social button integration and counter
-Version: 1.7.1
+Version: 1.7.2
 Update: 2013-05-18
 Author: David Maciejewski
 Author URI: http://macx.de/+

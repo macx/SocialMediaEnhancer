@@ -8,6 +8,9 @@
 	<p><b>Wichtig!</b> Die Shares werden maximal einmal in der Stunde pro aufgerufenen Artikel abgefragt. Durch Speichern des Artikels in WordPress können
 	Sie eine neue Zählung veranlassen.</p>
 
+	<p>Die Daten ses SME stehen im Array zur Verfügung. <code>&lt;?php echo $post->socialInfo['twitter']['count']; ?&gt;</code> zeigt die Anzahl von Tweets an,
+	<code>&lt;?php echo $post->socialInfo['total']; ?&gt;</code> zeigt alle sozialen Aktivitäten inklusive aller Kommentare an.</p>
+
 	<form action="options.php" method="post">
 		<?php
 			settings_fields('smeOptions');
