@@ -3,8 +3,8 @@
 Plugin Name: SocialMediaEnhancer
 Plugin URI: https://github.com/macx/SocialMediaEnhancer
 Description: Smart social button integration and counter
-Version: 1.6
-Update: 2012-04-16
+Version: 1.7
+Update: 2013-05-18
 Author: David Maciejewski
 Author URI: http://macx.de/+
 */
@@ -19,7 +19,7 @@ class SocialMediaEnhancer {
 	public static function init() {
 		new self;
 	}
-	
+
 	public function __construct() {
 		global $wpdb;
 
@@ -28,7 +28,9 @@ class SocialMediaEnhancer {
 		$this->pluginBaseName   = plugin_basename(__FILE__);
 		$this->pluginBaseFolder = plugin_basename(dirname(__FILE__));
 		$this->pluginFileName   = str_replace($this->pluginBaseFolder . '/', '', $this->pluginBaseName);
-		$this->pluginUrl        = WP_PLUGIN_URL . '/' . $this->pluginBaseFolder;
+
+		$this->pluginPathName = basename(__DIR__);
+		$this->pluginUrl      = plugins_url() . '/' . $this->pluginPathName;
 
 		// add theme support and  thumbs
 		if(function_exists('add_theme_support')) {
@@ -44,6 +46,7 @@ class SocialMediaEnhancer {
 		add_action('the_post', array(&$this, 'getSocialData'));
 		add_action('get_the_post', array(&$this, 'getSocialData'));
 		add_action('wp_enqueue_scripts', array(&$this, 'includeScripts'));
+		add_action('save_post', array(&$this, 'onSavePost'));
 
 		add_shortcode('socialMediaEnhancer', array(&$this, 'smeShortcode'));
 
@@ -60,9 +63,11 @@ class SocialMediaEnhancer {
 		$this->options = get_option('smeOptions', array(
 			'general' => array(
 				'services' => array(
-					'google'   => 1,
-					'facebook' => 1,
-					'twitter'  => 1
+					'google'    => 1,
+					'facebook'  => 1,
+					'twitter'   => 1,
+					'linkedin'  => 1,
+					'pinterest' => 1,
 				),
 				'style' => 'light',
 				'embed' => 'begin'
@@ -82,7 +87,7 @@ class SocialMediaEnhancer {
 	public function smeOptionDefaults() {
 		update_option('sdgOptions', $this->options);
 	}
-	
+
 	function setMetaData() {
 		global $post;
 
@@ -121,7 +126,7 @@ class SocialMediaEnhancer {
 						);
 					}
 				}
-				
+
 				// overwrite description on single image view
 				if($post->post_parent != 0) {
 					$title        = trim(substr($post->post_content, 0, 70)) . '&#8230;';
@@ -176,14 +181,14 @@ class SocialMediaEnhancer {
 	*/
 	function getSocialData($post) {
 		$twitterAccount      = $this->options['accounts']['twitter'];
-		$permalinkUrl        = get_permalink();
+		$permalinkUrl        = get_permalink($post->ID);
 		$permalinkUrlEncoded = urlencode($permalinkUrl);
-		$postTitle           = get_the_title();
+		$postTitle           = get_the_title($post->ID);
 		$postTitle           = preg_replace('/(&#8211;|&#8212;)/i', '-', $postTitle);
 		$postTitleEncoded    = urlencode($postTitle);
 		$postTitleLimit      = 90;
-		$transientTimeout    = (60 * 15);
-		$transientApiKey     = 'post' . get_the_ID() . '_socialInfo';
+		$transientTimeout    = (60 * 60);
+		$transientApiKey     = 'post' . $post->ID . '_socialInfo';
 		$connectionTimeout   = 3; // set your desired connection timeout for external API calls
 
 		// debug
@@ -193,106 +198,167 @@ class SocialMediaEnhancer {
 
 		// get saved data from wordpress transient api
 		// see: http://codex.wordpress.org/Transients_API
+
 		if($socialInfo = get_transient($transientApiKey)) {
 			$post->socialInfo = $socialInfo;
 		} else {
-			$socialInfo = array();
+			$cntComments = wp_count_comments($post->ID)->total_comments;
+			$socialInfo  = array(
+				'comments' => $cntComments,
+				'total'    => $cntComments
+			);
+
+			// setup google +1 button
+			if($this->options['general']['services']['google'] == 1) {
+				// see: http://code.google.com/intl/de-AT/apis/+1button/
+				$ch = curl_init();
+				curl_setopt_array($ch, array(
+					CURLOPT_URL            => 'https://clients6.google.com/rpc',
+					CURLOPT_POST           => 1,
+					CURLOPT_POSTFIELDS     => '[{"method":"pos.plusones.get","id":"p","params":{"nolog":true,"id":"' . $permalinkUrl . '","source":"widget","userId":"@viewer","groupId":"@self"},"jsonrpc":"2.0","key":"p","apiVersion":"v1"}]',
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_HTTPHEADER     => array('Content-type: application/json'),
+					CURLOPT_RETURNTRANSFER => 3,
+					CURLOPT_TIMEOUT        => $connectionTimeout,
+					CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
+				));
+				$rawData = curl_exec($ch);
+				curl_close($ch);
+
+				if($plusOneData = json_decode($rawData, true)) {
+					$socialInfo['google']['count'] = intval($plusOneData[0]['result']['metadata']['globalCounts']['count']);
+				} else {
+					$socialInfo['google']['count'] = intval(0);
+				}
+
+				// increase total counter
+				if($socialInfo['google']['count'] > 0) {
+					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['google']['count']);
+				}
+
+				// setup google +1 button
+				$socialInfo['google']['shareUrl']   = 'https://plus.google.com/share?url=' . $permalinkUrl;
+			}
 
 			// get count data from twitter
-			$ch = curl_init();
-			curl_setopt_array($ch, array(
-				CURLOPT_URL            => 'http://urls.api.twitter.com/1/urls/count.json?url=' . $permalinkUrl,
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_TIMEOUT        => $connectionTimeout,
-				CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
-			));
-			$rawData = curl_exec($ch);
-			curl_close($ch);
+			if($this->options['general']['services']['twitter'] == 1) {
+				$ch = curl_init();
+				curl_setopt_array($ch, array(
+					CURLOPT_URL            => 'http://urls.api.twitter.com/1/urls/count.json?url=' . $permalinkUrl,
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_TIMEOUT        => $connectionTimeout,
+					CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
+				));
+				$rawData = curl_exec($ch);
+				curl_close($ch);
 
-			if($twitterData = json_decode($rawData)) {
-				$socialInfo['twitter']['count'] = intval($twitterData->count);
-			} else {
-				$socialInfo['twitter']['count'] = intval(0);
+				if($twitterData = json_decode($rawData)) {
+					$socialInfo['twitter']['count'] = intval($twitterData->count);
+				} else {
+					$socialInfo['twitter']['count'] = intval(0);
+				}
+
+				// setup twitter
+				if(strlen($postTitle) > $postTitleLimit) {
+					$twitterPostTitle = html_entity_decode(mb_substr($postTitle, 0, $postTitleLimit) . '...');
+				} else {
+					$twitterPostTitle = html_entity_decode($postTitle);
+				}
+
+				// increase total counter
+				if($socialInfo['twitter']['count'] > 0) {
+					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['twitter']['count']);
+				}
+
+				$message                            = urlencode($twitterPostTitle);
+				$related                            = ($twitterAccount) ? '&related=' . $twitterAccount: '';
+				$via                                = ($twitterAccount) ? '&via=' . $twitterAccount: '';
+				$socialInfo['twitter']['shareUrl']  = 'http://twitter.com/intent/tweet?text=' .$message . '&url=' . $permalinkUrl . $related . $via . '&lang=de';
 			}
 
 			// get count data from facebook
-			// see: https://developers.facebook.com/docs/reference/api/
-			$ch = curl_init();
-			curl_setopt_array($ch, array(
-				CURLOPT_URL            => 'http://graph.facebook.com/?ids=' . $permalinkUrl,
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_TIMEOUT        => $connectionTimeout,
-				CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
-			));
-			$rawData = curl_exec($ch);
-			curl_close($ch);
+			if($this->options['general']['services']['facebook'] == 1) {
+				// see: https://developers.facebook.com/docs/reference/api/
+				$ch = curl_init();
+				curl_setopt_array($ch, array(
+					CURLOPT_URL            => 'http://graph.facebook.com/?ids=' . $permalinkUrl,
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_TIMEOUT        => $connectionTimeout,
+					CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
+				));
+				$rawData = curl_exec($ch);
+				curl_close($ch);
 
-			if($facebookData = json_decode($rawData, true)) {
-				$socialInfo['facebook']['count'] = intval($facebookData[$permalinkUrl]['shares']);
-			} else {
-				$socialInfo['facebook']['count'] = intval(0);
-			}
+				if($facebookData = json_decode($rawData, true)) {
+					$socialInfo['facebook']['count'] = intval($facebookData[$permalinkUrl]['shares']);
+				} else {
+					$socialInfo['facebook']['count'] = intval(0);
+				}
 
-			// setup google +1 button
-			// see: http://code.google.com/intl/de-AT/apis/+1button/
-			$ch = curl_init();
-			curl_setopt_array($ch, array(
-				CURLOPT_URL            => 'https://clients6.google.com/rpc',
-				CURLOPT_POST           => 1,
-				CURLOPT_POSTFIELDS     => '[{"method":"pos.plusones.get","id":"p","params":{"nolog":true,"id":"' . $permalinkUrl . '","source":"widget","userId":"@viewer","groupId":"@self"},"jsonrpc":"2.0","key":"p","apiVersion":"v1"}]',
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_HTTPHEADER     => array('Content-type: application/json'),
-				CURLOPT_RETURNTRANSFER => 3,
-				CURLOPT_TIMEOUT        => $connectionTimeout,
-				CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
-			));
-			$rawData = curl_exec($ch);
-			curl_close($ch);
+				// increase total counter
+				if($socialInfo['facebook']['count'] > 0) {
+					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['facebook']['count']);
+				}
 
-			if($plusOneData = json_decode($rawData, true)) {
-				$socialInfo['google']['count'] = intval($plusOneData[0]['result']['metadata']['globalCounts']['count']);
-			} else {
-				$socialInfo['google']['count'] = intval(0);
+				// setup facebook
+				$socialInfo['facebook']['shareUrl'] = 'http://www.facebook.com/sharer.php?u=' . $permalinkUrl . '&t=' . urlencode($postTitle);
 			}
 
 			// get count data from linkedin
-			$ch = curl_init();
-			curl_setopt_array($ch, array(
-				CURLOPT_URL            => 'http://www.linkedin.com/countserv/count/share?url=' . $permalinkUrl . '&format=json',
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_TIMEOUT        => $connectionTimeout,
-				CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
-			));
-			$rawData = curl_exec($ch);
-			curl_close($ch);
+			if($this->options['general']['services']['linkedin'] == 1) {
+				$ch = curl_init();
+				curl_setopt_array($ch, array(
+					CURLOPT_URL            => 'http://www.linkedin.com/countserv/count/share?url=' . $permalinkUrl . '&format=json',
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_TIMEOUT        => $connectionTimeout,
+					CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
+				));
+				$rawData = curl_exec($ch);
+				curl_close($ch);
 
-			if($linkedinData = json_decode($rawData, true)) {
-				$socialInfo['linkedin']['count'] = intval($linkedinData['count']);
-			} else {
-				$socialInfo['linkedin']['count'] = intval(0);
+				if($linkedinData = json_decode($rawData, true)) {
+					$socialInfo['linkedin']['count'] = intval($linkedinData['count']);
+				} else {
+					$socialInfo['linkedin']['count'] = intval(0);
+				}
+
+				// increase total counter
+				if($socialInfo['linkedin']['count'] > 0) {
+					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['linkedin']['count']);
+				}
+
+				// setup linkedin button
+				// @see https://developer.linkedin.com/documents/share-linkedin
+				$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&url=' . $permalinkUrlEncoded . '&title=' . $postTitleEncoded;
 			}
 
-			// setup twitter
-			if(strlen($postTitle) > $postTitleLimit) {
-				$twitterPostTitle = html_entity_decode(mb_substr($postTitle, 0, $postTitleLimit) . '...');
-			} else {
-				$twitterPostTitle = html_entity_decode($postTitle);
+			// get count data from pinterest
+			if($this->options['general']['services']['pinterest'] == 1) {
+				$ch = curl_init();
+				curl_setopt_array($ch, array(
+					CURLOPT_URL            => 'http://api.pinterest.com/v1/urls/count.json?url=' . $permalinkUrl,
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_TIMEOUT        => $connectionTimeout,
+					CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
+				));
+				$rawData = curl_exec($ch);
+				curl_close($ch);
+
+				if($linkedinData = json_decode($rawData, true)) {
+					$socialInfo['pinterest']['count'] = intval($linkedinData['count']);
+				} else {
+					$socialInfo['pinterest']['count'] = intval(0);
+				}
+
+				// increase total counter
+				if($socialInfo['pinterest']['count'] > 0) {
+					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['pinterest']['count']);
+				}
+
+				// setup linkedin button
+				// @see https://developer.linkedin.com/documents/share-linkedin
+				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postTitleEncoded;
 			}
-
-			$message                            = urlencode($twitterPostTitle);
-			$related                            = ($twitterAccount) ? '&related=' . $twitterAccount: '';
-			$via                                = ($twitterAccount) ? '&via=' . $twitterAccount: '';
-			$socialInfo['twitter']['shareUrl']  = 'http://twitter.com/intent/tweet?text=' .$message . '&url=' . $permalinkUrl . $related . $via . '&lang=de';
-
-			// setup facebook
-			$socialInfo['facebook']['shareUrl'] = 'http://www.facebook.com/sharer.php?u=' . $permalinkUrl . '&t=' . urlencode($postTitle);
-
-			// setup google +1 button
-			$socialInfo['google']['shareUrl']   = 'https://plus.google.com/share?url=' . $permalinkUrl;
-
-			// setup linkedin button
-			// @see https://developer.linkedin.com/documents/share-linkedin
-			$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&url=' . $permalinkUrlEncoded . '&title=' . $postTitleEncoded;
 
 			// attach results to $post object
 			$post->socialInfo = $socialInfo;
@@ -384,6 +450,11 @@ class SocialMediaEnhancer {
 		}
 
 		return $links;
+	}
+
+	public function onSavePost($postId) {
+		$transientApiKey     = 'post' . $postId . '_socialInfo';
+		delete_transient($transientApiKey);
 	}
 }
 
