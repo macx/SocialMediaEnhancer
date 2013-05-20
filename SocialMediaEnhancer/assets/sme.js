@@ -8,7 +8,7 @@
 				title       = link.attr('title'),
 				service     = link.data('service'),
 				smeServices = {
-					googlePlus: {
+					google: {
 						site:   'Google',
 						action: '+1'
 					},
