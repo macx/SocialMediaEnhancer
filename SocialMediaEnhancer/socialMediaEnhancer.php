@@ -3,8 +3,8 @@
 Plugin Name: SocialMediaEnhancer
 Plugin URI: https://github.com/macx/SocialMediaEnhancer
 Description: Smart social button integration and counter
-Version: 1.7.3
-Update: 2013-05-20
+Version: 1.8.1
+Update: 2013-05-21
 Author: David Maciejewski
 Author URI: http://macx.de/+
 */
@@ -69,7 +69,7 @@ class SocialMediaEnhancer {
 					'linkedin'  => 1,
 					'pinterest' => 1,
 				),
-				'style' => 'light',
+				'style' => 'sme',
 				'embed' => 'begin'
 			)
 		));
@@ -187,6 +187,7 @@ class SocialMediaEnhancer {
 		$postTitle           = preg_replace('/(&#8211;|&#8212;)/i', '-', $postTitle);
 		$postTitleEncoded    = urlencode($postTitle);
 		$postTitleLimit      = 90;
+		$postExcerptEncoded  = urlencode($post->excerpt);
 		$transientTimeout    = (60 * 60);
 		$transientApiKey     = 'post' . $post->ID . '_socialInfo';
 		$connectionTimeout   = 3; // set your desired connection timeout for external API calls
@@ -329,7 +330,8 @@ class SocialMediaEnhancer {
 
 				// setup linkedin button
 				// @see https://developer.linkedin.com/documents/share-linkedin
-				$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&url=' . $permalinkUrlEncoded . '&title=' . $postTitleEncoded;
+				// @todo add &source=blog_title
+				$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&url=' . $permalinkUrlEncoded . '&title=' . $postTitleEncoded . '&summary=' . $postExcerpt;
 			}
 
 			// get count data from pinterest
@@ -357,8 +359,11 @@ class SocialMediaEnhancer {
 
 				// setup linkedin button
 				// @see https://developer.linkedin.com/documents/share-linkedin
-				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postTitleEncoded;
+				// @2to add &media=thumbnail
+				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postExcerpt;
 			}
+
+
 
 			// attach results to $post object
 			$post->socialInfo = $socialInfo;
