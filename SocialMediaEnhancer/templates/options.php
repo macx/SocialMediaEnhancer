@@ -2,8 +2,14 @@
 	<div id="icon-options-general" class="icon32"><br></div>
 	<h2><?php echo __('Einstellungen › SocialMediaEnhancer'); ?></h2>
 
-	<p>Der SocialMediaEnhancer erweitert dein Blog durch Social-Media-Icons, zählt die Zugriffe und ermöglicht es deinen Besuchern, deine Inhalte leicht
+	<p>Der SocialMediaEnhancer erweitert dein Blog durch Social-Media-Icons, zählt die Shares und ermöglicht es deinen Besuchern, deine Inhalte leicht
 	zu teilen.</p>
+
+	<p><b>Wichtig!</b> Die Shares werden maximal einmal in der Stunde pro aufgerufenen Artikel abgefragt. Durch Speichern des Artikels in WordPress können
+	Sie eine neue Zählung veranlassen.</p>
+
+	<p>Die Daten ses SME stehen im Array zur Verfügung. <code>&lt;?php echo $post->socialInfo['twitter']['count']; ?&gt;</code> zeigt die Anzahl von Tweets an,
+	<code>&lt;?php echo $post->socialInfo['total']; ?&gt;</code> zeigt alle sozialen Aktivitäten inklusive aller Kommentare an.</p>
 
 	<form action="options.php" method="post">
 		<?php
@@ -41,12 +47,12 @@
 							</label><br>
 
 							<label for="service_linkedin">
-								<input name="smeOptions[general][services][linkedin]" type="checkbox" id="service_linkedin"<?php if($this->options['general']['services']['linkedin'] == 1) echo ' checked="checked"'; ?>>
+								<input name="smeOptions[general][services][linkedin]" type="checkbox" id="service_linkedin" value="1"<?php if($this->options['general']['services']['linkedin'] == 1) echo ' checked="checked"'; ?>>
 								LinkedIn
 							</label><br>
 
-							<label for="default_comment_status">
-								<input name="smeOptions[general][services][pinterest]" type="checkbox" id="default_comment_status"<?php if($this->options['general']['services']['pinterest'] == 1) echo ' checked="checked"'; ?>>
+							<label for="service_pinterest">
+								<input name="smeOptions[general][services][pinterest]" type="checkbox" id="service_pinterest" value="1"<?php if($this->options['general']['services']['pinterest'] == 1) echo ' checked="checked"'; ?>>
 								Pinterest
 							</label><br>
 
@@ -59,9 +65,9 @@
 					<th scope="row">Button-Design</th>
 					<td>
 						<select name="smeOptions[general][style]" id="default_post_format">
-							<option value="light"<?php if($this->options['general']['style'] == 'light') echo ' selected="selected"'; ?>>Standard (hell)</option>
-							<option value="dark"<?php if($this->options['general']['style'] == 'dark') echo ' selected="selected"'; ?>>Standard (dunkel)</option>
-							<option value="css"<?php if($this->options['general']['style'] == 'css') echo ' selected="selected"'; ?>>CSS-Version</option>
+							<option value="sme"<?php if($this->options['general']['style'] == 'css') echo ' selected="selected"'; ?>>SocialMediaEnhancer-Buttons</option>
+							<option value="light"<?php if($this->options['general']['style'] == 'light') echo ' selected="selected"'; ?>>Klassisch (für helle Hintergründe)</option>
+							<option value="dark"<?php if($this->options['general']['style'] == 'dark') echo ' selected="selected"'; ?>>Klassisch (für dunkele Hintergründe)</option>
 						</select><br>
 
 						<p class="description">Bestimmt das Aussehen der Buttons.</p>
