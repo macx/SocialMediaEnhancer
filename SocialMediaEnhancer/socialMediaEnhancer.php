@@ -85,6 +85,7 @@ class SocialMediaEnhancer {
 					'twitter'   => 1,
 					'linkedin'  => 1,
 					'pinterest' => 1,
+          'xing' => 1
 				),
 				'style' => 'sme',
 				'embed' => 'begin'
@@ -220,7 +221,7 @@ class SocialMediaEnhancer {
 		if($socialInfo = get_transient($transientApiKey)) {
 			$post->socialInfo = $socialInfo;
 		} else {
-			$cntComments = wp_count_comments($post->ID)->total_comments;
+			$cntComments = wp_count_comments($post->ID)->approved;
 			$socialInfo  = array(
 				'comments' => $cntComments,
 				'total'    => $cntComments
@@ -374,11 +375,37 @@ class SocialMediaEnhancer {
 					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['pinterest']['count']);
 				}
 
-				// setup linkedin button
-				// @see https://developer.linkedin.com/documents/share-linkedin
-				// @2to add &media=thumbnail
-				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postExcerpt;
+        // setup linkedin button
+        // @see https://developer.linkedin.com/documents/share-linkedin
+        // @2to add &media=thumbnail
+        $socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postExcerpt;
 			}
+
+      // get count data from xing
+      if($this->options['general']['services']['xing'] == 1) {
+
+        //Get the whole xing-button
+        $contents = file_get_contents( 'https://www.xing-share.com/app/share?op=get_share_button;url=' . $permalinkUrl . ';counter=right;lang=de;type=iframe;hovercard_position=1;shape=square');
+
+        //Find the interesting part to strip
+        preg_match("'<span class=\"xing-count right\">(.*?)</span>'si", $contents, $matches);
+
+        //To make sure there is a count for that site
+        if( isset( $matches ) ) {
+          $socialInfo['xing']['count'] = intval($matches[1]);
+        } else {
+          $socialInfo['xing']['count'] = intval(0);
+        }
+
+        // increase total counter
+        if($socialInfo['xing']['count'] > 0) {
+          $socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['xing']['count']);
+        }
+
+        // setup xing button
+        // @2to add &media=thumbnail
+        $socialInfo['xing']['shareUrl'] = 'https://www.xing.com/social_plugins/share?url=' . $permalinkUrlEncoded;
+      }
 
 
 

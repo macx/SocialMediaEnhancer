@@ -56,6 +56,11 @@
 								Pinterest
 							</label><br>
 
+              <label for="service_pinterest">
+                <input name="smeOptions[general][services][xing]" type="checkbox" id="service_xing" value="1"<?php if($this->options['general']['services']['xing'] == 1) echo ' checked="checked"'; ?>>
+                XING
+              </label><br>
+
 							<p class="description">Von jedem aktivierten Dienst wird der Teilen-Button auf auf der Webseite angezeigt. Zusätzlich
 							werden von dem jeweiligen Dienst die aktuellen Zahlen abgerufen.</p>
 						</fieldset>
