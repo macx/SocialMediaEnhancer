@@ -411,7 +411,7 @@ class SocialMediaEnhancer {
 
         // setup xing button
         // @2to add &media=thumbnail
-        $socialInfo['xing']['shareUrl'] = 'https://www.xing.com/social_plugins/share?url=' . $permalinkUrlEncoded;
+        $socialInfo['xing']['shareUrl'] = 'https://www.xing-share.com/app/user?op=share;sc_p=xing-share;url=' . $permalinkUrlEncoded;
       }
 
 
