@@ -385,10 +385,17 @@ class SocialMediaEnhancer {
       if($this->options['general']['services']['xing'] == 1) {
 
         //Get the whole xing-button
-        $contents = file_get_contents( 'https://www.xing-share.com/app/share?op=get_share_button;url=' . $permalinkUrl . ';counter=right;lang=de;type=iframe;hovercard_position=1;shape=square');
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+          CURLOPT_URL            => 'https://www.xing-share.com/app/share?op=get_share_button;url=' . $permalinkUrlEncoded . ';counter=right;lang=de;type=iframe;hovercard_position=1;shape=square',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_SSL_VERIFYPEER  => false,
+        ));
+        $res = curl_exec($ch);
 
+        curl_close($ch);
         //Find the interesting part to strip
-        preg_match("'<span class=\"xing-count right\">(.*?)</span>'si", $contents, $matches);
+        preg_match("'<span class=\"xing-count right\">(.*?)</span>'si", $res, $matches);
 
         //To make sure there is a count for that site
         if( isset( $matches ) ) {
