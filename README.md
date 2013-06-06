@@ -1,4 +1,4 @@
-# SocialMediaEnhancer
+# SocialMediaEnhancer (with XING-support from MrFloppy)
 **Contributors:** macx
 **Donate link:** <http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE>
 **Tags:** social, google+, facebook, twitter, linkedin, pinterest, buttons, counts, social media
