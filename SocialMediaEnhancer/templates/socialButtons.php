@@ -17,6 +17,9 @@
 			<?php if($this->options['general']['services']['linkedin'] == 1): ?>
 				<a href="<?php echo $post->socialInfo['linkedin']['shareUrl']; ?>" class="<?php echo $smeButtonStyle; ?>Linkedin" rel="sme" data-service="linkedin"><i></i><?php echo $post->socialInfo['linkedin']['count']; ?></a>
 			<?php endif; ?>
+			<?php if($this->options['general']['services']['xing'] == 1): ?>
+				<a href="<?php echo $post->socialInfo['xing']['shareUrl']; ?>" class="<?php echo $smeButtonStyle; ?>xing" rel="sme" data-service="xing"><i></i><?php echo $post->socialInfo['xing']['count']; ?></a>
+			<?php endif; ?>
 		</p>
 	<?php else: ?>
 		<?php if($this->options['general']['services']['google'] == 1): ?>

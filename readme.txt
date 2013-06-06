@@ -4,7 +4,7 @@ Donate link: http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE
 Tags: social, google+, facebook, twitter, linkedin, pinterest, buttons, counts, social media
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.8.1
+Stable tag: 1.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,4 +35,16 @@ For a manual installation using FTP:
 
 == Change Log ==
 
-Actual Version is 1.8.1
+=== 1.8.2 ===
+
+- added tracking of XING counts (by MrFloppy)
+- added option to turn on XING support
+- update icons for Google+, Facebook, Twitter
+
+=== 1.8.1 ===
+
+Initial Tracking of changes
+
+=== Planned updates ===
+
+- full support of LinkedIn, Pinterest and XING with sharing buttons

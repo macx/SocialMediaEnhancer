@@ -38,7 +38,7 @@
 
 							<label for="service_facebook">
 								<input name="smeOptions[general][services][facebook]" type="checkbox" id="service_facebook" value="1"<?php if($this->options['general']['services']['facebook'] == 1) echo ' checked="checked"'; ?>>
-								Facebook+
+								Facebook
 							</label><br>
 
 							<label for="service_twitter">
@@ -48,21 +48,23 @@
 
 							<label for="service_linkedin">
 								<input name="smeOptions[general][services][linkedin]" type="checkbox" id="service_linkedin" value="1"<?php if($this->options['general']['services']['linkedin'] == 1) echo ' checked="checked"'; ?>>
-								LinkedIn
+								LinkedIn*
 							</label><br>
 
 							<label for="service_pinterest">
 								<input name="smeOptions[general][services][pinterest]" type="checkbox" id="service_pinterest" value="1"<?php if($this->options['general']['services']['pinterest'] == 1) echo ' checked="checked"'; ?>>
-								Pinterest
+								Pinterest*
 							</label><br>
 
-              <label for="service_pinterest">
-                <input name="smeOptions[general][services][xing]" type="checkbox" id="service_xing" value="1"<?php if($this->options['general']['services']['xing'] == 1) echo ' checked="checked"'; ?>>
-                XING
-              </label><br>
+							<label for="service_xing">
+								<input name="smeOptions[general][services][xing]" type="checkbox" id="service_xing" value="1"<?php if($this->options['general']['services']['xing'] == 1) echo ' checked="checked"'; ?>>
+								XING*
+							</label><br>
 
 							<p class="description">Von jedem aktivierten Dienst wird der Teilen-Button auf auf der Webseite angezeigt. Zusätzlich
 							werden von dem jeweiligen Dienst die aktuellen Zahlen abgerufen.</p>
+
+							<p><em>*) Die Buttons werden in einer der nächsten Versionen nachgeliefert.</em></p>
 						</fieldset>
 					</td>
 				</tr>
@@ -70,8 +72,8 @@
 					<th scope="row">Button-Design</th>
 					<td>
 						<select name="smeOptions[general][style]" id="default_post_format">
-							<option value="sme"<?php if($this->options['general']['style'] == 'css') echo ' selected="selected"'; ?>>Buttons</option>
-							<option value="flat"<?php if($this->options['general']['style'] == 'flat') echo ' selected="selected"'; ?>>Flat-Design</option>
+							<option value="sme"<?php if($this->options['general']['style'] == 'sme') echo ' selected="selected"'; ?>>Buttons</option>
+							<?php /*<option value="flat"<?php if($this->options['general']['style'] == 'flat') echo ' selected="selected"'; ?>>Flat-Design</option>*/ ?>
 							<option value="light"<?php if($this->options['general']['style'] == 'light') echo ' selected="selected"'; ?>>Klassisch (für helle Hintergründe)</option>
 							<option value="dark"<?php if($this->options['general']['style'] == 'dark') echo ' selected="selected"'; ?>>Klassisch (für dunkele Hintergründe)</option>
 						</select><br>

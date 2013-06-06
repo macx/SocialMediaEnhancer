@@ -55,7 +55,7 @@ class SocialMediaEnhancer {
 		}
 
 		// set meta data
-		add_filter('the_content', array(&$this, 'addSocialBar'));
+		add_filter('the_content', array(&$this, 'addSocialButtons'));
 		add_filter('plugin_row_meta', array(&$this, 'smeOptionsLink'), 10, 2);
 
 		add_action('init', array(&$this, 'smeInit'));
@@ -83,9 +83,9 @@ class SocialMediaEnhancer {
 					'google'    => 1,
 					'facebook'  => 1,
 					'twitter'   => 1,
-					'linkedin'  => 1,
-					'pinterest' => 1,
-          'xing' => 1
+					'linkedin'  => 0,
+					'pinterest' => 0,
+					'xing'      => 0
 				),
 				'style' => 'sme',
 				'embed' => 'begin'
@@ -375,46 +375,41 @@ class SocialMediaEnhancer {
 					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['pinterest']['count']);
 				}
 
-        // setup linkedin button
-        // @see https://developer.linkedin.com/documents/share-linkedin
-        // @2to add &media=thumbnail
-        $socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postExcerpt;
+				// setup pinterest button
+				// @2to add &media=thumbnail
+				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postExcerpt;
 			}
 
-      // get count data from xing
-      if($this->options['general']['services']['xing'] == 1) {
+			// get count data from xing
+			if($this->options['general']['services']['xing'] == 1) {
+				// Get the whole xing-button
+				$ch = curl_init();
+				curl_setopt_array($ch, array(
+					CURLOPT_URL            => 'https://www.xing-share.com/app/share?op=get_share_button;url=' . $permalinkUrlEncoded . ';counter=right;lang=de;type=iframe;hovercard_position=1;shape=square',
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_SSL_VERIFYPEER => false,
+				));
+				$res = curl_exec($ch);
 
-        //Get the whole xing-button
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-          CURLOPT_URL            => 'https://www.xing-share.com/app/share?op=get_share_button;url=' . $permalinkUrlEncoded . ';counter=right;lang=de;type=iframe;hovercard_position=1;shape=square',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_SSL_VERIFYPEER  => false,
-        ));
-        $res = curl_exec($ch);
+				curl_close($ch);
+				//Find the interesting part to strip
+				preg_match("'<span class=\"xing-count right\">(.*?)</span>'si", $res, $matches);
 
-        curl_close($ch);
-        //Find the interesting part to strip
-        preg_match("'<span class=\"xing-count right\">(.*?)</span>'si", $res, $matches);
+				//To make sure there is a count for that site
+				if( isset( $matches ) ) {
+					$socialInfo['xing']['count'] = intval($matches[1]);
+				} else {
+					$socialInfo['xing']['count'] = intval(0);
+				}
 
-        //To make sure there is a count for that site
-        if( isset( $matches ) ) {
-          $socialInfo['xing']['count'] = intval($matches[1]);
-        } else {
-          $socialInfo['xing']['count'] = intval(0);
-        }
+				// increase total counter
+				if($socialInfo['xing']['count'] > 0) {
+					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['xing']['count']);
+				}
 
-        // increase total counter
-        if($socialInfo['xing']['count'] > 0) {
-          $socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['xing']['count']);
-        }
-
-        // setup xing button
-        // @2to add &media=thumbnail
-        $socialInfo['xing']['shareUrl'] = 'https://www.xing-share.com/app/user?op=share;sc_p=xing-share;url=' . $permalinkUrlEncoded;
-      }
-
-
+				// setup xing button
+				$socialInfo['xing']['shareUrl'] = 'https://www.xing-share.com/app/user?op=share;sc_p=xing-share;url=' . $permalinkUrlEncoded;
+			}
 
 			// attach results to $post object
 			$post->socialInfo = $socialInfo;
@@ -424,12 +419,12 @@ class SocialMediaEnhancer {
 		}
 	}
 
-	public function addSocialBar($content) {
+	public function addSocialButtons($content) {
 		global $post;
 
 		if($this->options['general']['embed'] != 'disabled') {
 			ob_start();
-			include 'templates/socialShare.php';
+			include 'templates/socialButtons.php';
 			$socialBar = ob_get_contents();
 			ob_end_clean();
 
