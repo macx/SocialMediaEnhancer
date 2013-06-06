@@ -1,16 +1,16 @@
-# SocialMediaEnhancer
-**Contributors:** macx
-**Donate link:** <http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE>
-**Tags:** social, google+, facebook, twitter, linkedin, pinterest, buttons, counts, social media
-**Requires at least:** 3.3
-**Tested up to:** 3.5
-**Stable tag:** 1.8.1
-**License:** GPLv2 or later
-**License URI:** <http://www.gnu.org/licenses/gpl-2.0.html>
+=== SocialMediaEnhancer ===
+Contributors: macx
+Donate link: http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE
+Tags: social, google+, facebook, twitter, linkedin, pinterest, buttons, counts, social media
+Requires at least: 3.3
+Tested up to: 3.5
+Stable tag: 1.8.1
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Fetches social counts from Google+, Facebook, Twitter, LinkedIn and Pinterst and provide beautiful sharing buttons without the use of JavaScript
 
-## Description
+== Description ==
 
 The SocialMediaEnhancer (SME) provides beautiful styled and static social media sharing buttons for your WordPress blog. It fetches the social counts
 (share activities) from Google+, Facebook, Twitter, LinkedIn and Pinterst in the background without the use of performance critital JavaScript
@@ -21,11 +21,10 @@ well formatted meta elements on every post.
 
 Choose a style for the buttons and decide which network do you want to use.
 
-### Feedback
+= Feedback =
+Please send me feedback if you have questions or new ideas on [Google+](http://macx.de/+) or [Twitter](https://twitter.com/macx).
 
-Please send me feedback if you have questions or new ideas on [Google+](https://plus.google.com/102458928073783517690) or [Twitter](https://twitter.com/macx).
-
-## Installation
+== Installation ==
 
 For a manual installation using FTP:
 
@@ -34,6 +33,6 @@ For a manual installation using FTP:
 3. Activate this Plugin in the WordPress-Backend through the 'Plugins' screen.
 4. Visit the options page in WordPress to setup it up for your needs.
 
-## Change Log
+== Change Log ==
 
 Actual Version is 1.8.1
