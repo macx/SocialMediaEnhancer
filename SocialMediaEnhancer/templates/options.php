@@ -65,7 +65,8 @@
 					<th scope="row">Button-Design</th>
 					<td>
 						<select name="smeOptions[general][style]" id="default_post_format">
-							<option value="sme"<?php if($this->options['general']['style'] == 'css') echo ' selected="selected"'; ?>>SocialMediaEnhancer-Buttons</option>
+							<option value="sme"<?php if($this->options['general']['style'] == 'css') echo ' selected="selected"'; ?>>Buttons</option>
+							<option value="flat"<?php if($this->options['general']['style'] == 'flat') echo ' selected="selected"'; ?>>Flat-Design</option>
 							<option value="light"<?php if($this->options['general']['style'] == 'light') echo ' selected="selected"'; ?>>Klassisch (für helle Hintergründe)</option>
 							<option value="dark"<?php if($this->options['general']['style'] == 'dark') echo ' selected="selected"'; ?>>Klassisch (für dunkele Hintergründe)</option>
 						</select><br>
