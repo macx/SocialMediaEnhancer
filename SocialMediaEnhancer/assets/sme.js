@@ -19,6 +19,10 @@
 					facebook: {
 						site:   'Facebook',
 						action: 'share'
+					},
+					xing: {
+						site:   'Xing',
+						action: 'share'
 					}
 				};
 

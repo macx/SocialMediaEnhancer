@@ -1,12 +1,4 @@
 # SocialMediaEnhancer
-**Contributors:** macx
-**Donate link:** <http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE>
-**Tags:** social, google+, facebook, twitter, linkedin, pinterest, buttons, counts, social media
-**Requires at least:** 3.3
-**Tested up to:** 3.5
-**Stable tag:** 1.8.2
-**License:** GPLv2 or later
-**License URI:** <http://www.gnu.org/licenses/gpl-2.0.html>
 
 Fetches social counts from Google+, Facebook, Twitter, LinkedIn and Pinterst and provide beautiful sharing buttons without the use of JavaScript
 
@@ -20,6 +12,8 @@ To provide a optimal presentation of your post at the social networks after shar
 well formatted meta elements on every post.
 
 Choose a style for the buttons and decide which network do you want to use.
+
+Donate-Link: <http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE>
 
 ### Feedback
 
@@ -38,6 +32,12 @@ For a manual installation using FTP:
 
 ## Change Log
 
+### 1.8.3
+
+- added XING-Button in Style "button"
+- external function to call sme staticly. Use <?php echo smeButtons(get_the_ID()); ?>
+- function to disble open graph meta data
+
 ### 1.8.2
 
 - added tracking of XING counts (by MrFloppy)
@@ -51,3 +51,9 @@ Initial Tracking of changes
 ## Planned updates
 
 - full support of LinkedIn, Pinterest and XING with sharing buttons
+
+## Licence
+
+Copyright 2012-2013 David Macieewski
+
+GPLv2 or later <http://www.gnu.org/licenses/gpl-2.0.html>

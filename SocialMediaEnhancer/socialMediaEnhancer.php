@@ -3,7 +3,7 @@
  * Plugin Name: SocialMediaEnhancer
  * Plugin URI: https://github.com/macx/SocialMediaEnhancer
  * Description: Smart social button integration and counter
- * Version: 1.8.1
+ * Version: 1.8.3
  * Update: 2013-05-21
  * Author: David Maciejewski
  * Author URI: http://macx.de/+
@@ -29,7 +29,7 @@
 add_action('init', array('SocialMediaEnhancer', 'init'));
 
 class SocialMediaEnhancer {
-	protected $pluginPath;
+	#protected $pluginPath;
 
 	protected $pluginUrl;
 
@@ -54,18 +54,41 @@ class SocialMediaEnhancer {
 			add_theme_support('post-thumbget_template_directory_urianils');
 		}
 
+		$this->options = get_option('smeOptions', array(
+			'general' => array(
+				'services' => array(
+					'google'    => 1,
+					'facebook'  => 1,
+					'twitter'   => 1,
+					'linkedin'  => 0,
+					'pinterest' => 0,
+					'xing'      => 0
+				),
+				'style'     => 'sme',
+				'embed'     => 'begin',
+				'opengraph' => array(
+					'disable' => 0
+				)
+			)
+		));
+
+		if($this->options['general']['embed'] != 'disabled') {
+			add_filter('the_content', array(&$this, 'addSocialButtons'));
+		}
+
+		if($this->options['general']['opengraph']['disable'] != 1) {
+			add_action('wp_head', array(&$this, 'setMetaData'));
+		}
+
 		// set meta data
-		add_filter('the_content', array(&$this, 'addSocialButtons'));
 		add_filter('plugin_row_meta', array(&$this, 'smeOptionsLink'), 10, 2);
+		add_shortcode('socialMediaEnhancer', array(&$this, 'smeShortcode'));
 
 		add_action('init', array(&$this, 'smeInit'));
-		add_action('wp_head', array(&$this, 'setMetaData'));
 		add_action('the_post', array(&$this, 'getSocialData'));
 		add_action('get_the_post', array(&$this, 'getSocialData'));
 		add_action('wp_enqueue_scripts', array(&$this, 'includeScripts'));
 		add_action('save_post', array(&$this, 'onSavePost'));
-
-		add_shortcode('socialMediaEnhancer', array(&$this, 'smeShortcode'));
 
 		add_theme_support('post-thumbnails');
 
@@ -77,26 +100,12 @@ class SocialMediaEnhancer {
 			register_activation_hook(__FILE__, array(&$this, 'smeOptionDefaults'));
 		}
 
-		$this->options = get_option('smeOptions', array(
-			'general' => array(
-				'services' => array(
-					'google'    => 1,
-					'facebook'  => 1,
-					'twitter'   => 1,
-					'linkedin'  => 0,
-					'pinterest' => 0,
-					'xing'      => 0
-				),
-				'style' => 'sme',
-				'embed' => 'begin'
-			)
-		));
 	}
 
 	public function smeInit() {
 		// specific image sizes
-		add_image_size('socialShareSmall', 100, 57, true);
-		add_image_size('socialShareBig', 400, 225, true);
+		add_image_size('socialShareSmall', 120, 120, true);
+		add_image_size('socialShareBig', 400, 400, true);
 
 		// i18n
 		load_plugin_textdomain('socialMediaEnhancer', false, 'socialMediaEnhancer/languages' );
@@ -108,7 +117,7 @@ class SocialMediaEnhancer {
 
 	function setMetaData() {
 		global $post;
-
+		
 		// set default variables
 		$blogTitle   = get_bloginfo('name');
 		$title       = $blogTitle;
@@ -146,7 +155,7 @@ class SocialMediaEnhancer {
 				}
 
 				// overwrite description on single image view
-				if($post->post_parent != 0) {
+				if(!is_page() && $post->post_parent != 0) {
 					$title        = trim(substr($post->post_content, 0, 70)) . '&#8230;';
 					$description  = $post->post_content;
 				}
@@ -211,7 +220,7 @@ class SocialMediaEnhancer {
 		$connectionTimeout   = 3; // set your desired connection timeout for external API calls
 
 		// debug
-		if(isset($_GET['flushSocialGraph']) && ($_GET['flushSocialGraph'] == 'flushAll')) {
+		if(isset($_GET['smeFlush']) && ($_GET['smeFlush'] == 'cache')) {
 			delete_transient($transientApiKey);
 		}
 
@@ -257,6 +266,8 @@ class SocialMediaEnhancer {
 
 				// setup google +1 button
 				$socialInfo['google']['shareUrl']   = 'https://plus.google.com/share?url=' . $permalinkUrl;
+			} else {
+				$socialInfo['google']['count'] = intval(0);
 			}
 
 			// get count data from twitter
@@ -293,6 +304,8 @@ class SocialMediaEnhancer {
 				$related                            = ($twitterAccount) ? '&related=' . $twitterAccount: '';
 				$via                                = ($twitterAccount) ? '&via=' . $twitterAccount: '';
 				$socialInfo['twitter']['shareUrl']  = 'http://twitter.com/intent/tweet?text=' .$message . '&url=' . $permalinkUrl . $related . $via . '&lang=de';
+			} else {
+				$socialInfo['twitter']['count'] = intval(0);
 			}
 
 			// get count data from facebook
@@ -321,6 +334,8 @@ class SocialMediaEnhancer {
 
 				// setup facebook
 				$socialInfo['facebook']['shareUrl'] = 'http://www.facebook.com/sharer.php?u=' . $permalinkUrl . '&t=' . urlencode($postTitle);
+			} else {
+				$socialInfo['facebook']['count'] = intval(0);
 			}
 
 			// get count data from linkedin
@@ -350,6 +365,8 @@ class SocialMediaEnhancer {
 				// @see https://developer.linkedin.com/documents/share-linkedin
 				// @todo add &source=blog_title
 				$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&url=' . $permalinkUrlEncoded . '&title=' . $postTitleEncoded . '&summary=' . $postExcerpt;
+			} else {
+				$socialInfo['linkedin']['count'] = intval(0);
 			}
 
 			// get count data from pinterest
@@ -378,6 +395,8 @@ class SocialMediaEnhancer {
 				// setup pinterest button
 				// @2to add &media=thumbnail
 				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postExcerpt;
+			} else {
+				$socialInfo['pinterest']['count'] = intval(0);
 			}
 
 			// get count data from xing
@@ -409,6 +428,8 @@ class SocialMediaEnhancer {
 
 				// setup xing button
 				$socialInfo['xing']['shareUrl'] = 'https://www.xing-share.com/app/user?op=share;sc_p=xing-share;url=' . $permalinkUrlEncoded;
+			} else {
+				$socialInfo['xing']['count'] = intval(0);
 			}
 
 			// attach results to $post object
@@ -417,6 +438,8 @@ class SocialMediaEnhancer {
 			// save result in api
 			set_transient($transientApiKey, $socialInfo, $transientTimeout);
 		}
+
+		return $post->socialInfo;
 	}
 
 	public function addSocialButtons($content) {
@@ -509,5 +532,15 @@ class SocialMediaEnhancer {
 	}
 }
 
-#SocialMediaEnhancer::init();
+function smeButtons($post = null) {
+	if(preg_match('/^[0-9]+$/', $post)) {
+		$post = get_post($post);
+	} elseif($post == null) {
+		return false;
+	}
 
+	$sme        = new SocialMediaEnhancer();
+	$socialData = $sme->getSocialData($post);
+
+	include_once $sme->pluginPath . '/templates/socialButtons.php';
+}

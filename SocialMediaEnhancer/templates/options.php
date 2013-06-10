@@ -16,9 +16,6 @@
 			settings_fields('smeOptions');
 
 			do_settings_sections('options');
-
-			#do_settings_fields('smeAccounts', 'twitterUsername');
-			#do_settings_fields('smeButtons', 'style');
 		?>
 
 		<h3>Allgemeine Einstellungen</h3>
@@ -94,9 +91,20 @@
 						Quelltext ein.</p>
 					</td>
 				</tr>
+				<tr valign="top">
+					<th scope="row">Metainformationen</th>
+					<td>
+						<label for="general_opengraph">
+							<input name="smeOptions[general][opengraph][disable]" type="checkbox" id="general_opengraph" value="1"<?php if($this->options['general'][opengraph][disable] == 1) echo ' checked="checked"'; ?>>
+							Open-Graph-Metainformationen deaktivieren <i>(nicht empfohlen)</i>
+						</label><br>
+
+						<p class="description">Der SocialMediaManager fügt der Seite optionale Metainformationen hinzu, damit die Netzwerke die optimalen Daten zum Teilen Ihrer Inhalte verwenden.</p>
+					</td>
+				</tr>
 			</tbody>
 		</table>
-
+		
 		<br>
 
 		<h3>Social-Media-Accounts</h3>
