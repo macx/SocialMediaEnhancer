@@ -17,7 +17,7 @@ Donate-Link: <http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE>
 
 ### Feedback
 
-Please send me feedback if you have questions or new ideas on [Google+](https://plus.google.com/102458928073783517690) or [Twitter](https://twitter.com/macx).
+Please send me feedback if you have questions or new ideas on [Google+](https://plus.google.com/102458928073783517690?rel=author) or [Twitter](https://twitter.com/macx).
 
 Thanks to MrFloppy for the XING support
 
