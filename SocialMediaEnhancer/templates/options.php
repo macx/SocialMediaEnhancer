@@ -68,12 +68,19 @@
 				<tr valign="top">
 					<th scope="row">Button-Design</th>
 					<td>
-						<select name="smeOptions[general][style]" id="default_post_format">
+						<select name="smeOptions[general][style]">
 							<option value="sme"<?php if($this->options['general']['style'] == 'sme') echo ' selected="selected"'; ?>>Buttons</option>
-							<?php /*<option value="flat"<?php if($this->options['general']['style'] == 'flat') echo ' selected="selected"'; ?>>Flat-Design</option>*/ ?>
+							<option value="flat"<?php if($this->options['general']['style'] == 'flat') echo ' selected="selected"'; ?>>Flat-Design</option>
 							<option value="light"<?php if($this->options['general']['style'] == 'light') echo ' selected="selected"'; ?>>Klassisch (für helle Hintergründe)</option>
 							<option value="dark"<?php if($this->options['general']['style'] == 'dark') echo ' selected="selected"'; ?>>Klassisch (für dunkele Hintergründe)</option>
 						</select><br>
+
+						<p>
+							<label for="general_label">
+							<input name="smeOptions[general][label]" type="checkbox" id="general_label" value="1"<?php if($this->options['general']['label'] == 1) echo ' checked="checked"'; ?>>
+								Dienste-Namen anzeigen <i>(nicht bei den klassischen Buttons)</i>
+							</label>
+						</p>
 
 						<p class="description">Bestimmt das Aussehen der Buttons.</p>
 					</td>
@@ -81,7 +88,7 @@
 				<tr valign="top">
 					<th scope="row">Platzierung der Buttons</th>
 					<td>
-						<select name="smeOptions[general][embed]" id="default_post_format">
+						<select name="smeOptions[general][embed]">
 							<option value="begin"<?php if($this->options['general']['embed'] == 'begin') echo ' selected="selected"'; ?>>Am Anfang jedes Artikels (empfohlen)</option>
 							<option value="end"<?php if($this->options['general']['embed'] == 'end') echo ' selected="selected"'; ?>>Am Ende jedes Artikels</option>
 							<option value="disabled"<?php if($this->options['general']['embed'] == 'disabled') echo ' selected="selected"'; ?>>Manuelle Einbindung</option>
@@ -95,7 +102,7 @@
 					<th scope="row">Metainformationen</th>
 					<td>
 						<label for="general_opengraph">
-							<input name="smeOptions[general][opengraph][disable]" type="checkbox" id="general_opengraph" value="1"<?php if($this->options['general'][opengraph][disable] == 1) echo ' checked="checked"'; ?>>
+							<input name="smeOptions[general][opengraph][disable]" type="checkbox" id="general_opengraph" value="1"<?php if($this->options['general']['opengraph']['disable'] == 1) echo ' checked="checked"'; ?>>
 							Open-Graph-Metainformationen deaktivieren <i>(nicht empfohlen)</i>
 						</label><br>
 

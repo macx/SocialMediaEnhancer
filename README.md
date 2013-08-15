@@ -32,6 +32,20 @@ For a manual installation using FTP:
 
 ## Change Log
 
+### 1.8.4
+
+- New: Flat Design Buttons
+- New: Default Image if a post has no thumbnail
+- New: Optionen to display the Social Network name in a modern button
+- New: Debug Mode. Activate it by adding this to your URL: ?smeDebug=true
+- New: Using SASS/Compass to build the CSS
+- New: Support for Pinterst Image Sharing (using the post thumbnail)
+- New: Support for article:publisher (Facebook publisher relation)
+- New: Support for link rel="publisher" (Google+ publisher relation)
+- New: Support for meta twitter:site (Twitter publisher relation)
+- Anhanced: Better Post Image Detection
+- Fixed: Post Description is now used correctly
+
 ### 1.8.3
 
 - added XING-Button in Style "button"

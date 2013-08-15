@@ -49,6 +49,12 @@ class SocialMediaEnhancer {
 		$this->pluginPathName = basename(__DIR__);
 		$this->pluginUrl      = plugins_url() . '/' . $this->pluginPathName;
 
+		if(current_user_can('manage_options') && isset($_GET['smeDebug']) && ($_GET['smeDebug'] == 'true')) {
+			$this->isDebugMode = true;
+		} else {
+			$this->isDebugMode = false;
+		}
+
 		// add theme support and  thumbs
 		if(function_exists('add_theme_support')) {
 			add_theme_support('post-thumbget_template_directory_urianils');
@@ -65,6 +71,7 @@ class SocialMediaEnhancer {
 					'xing'      => 0
 				),
 				'style'     => 'sme',
+				'label'     => 1,
 				'embed'     => 'begin',
 				'opengraph' => array(
 					'disable' => 0
@@ -104,8 +111,8 @@ class SocialMediaEnhancer {
 
 	public function smeInit() {
 		// specific image sizes
-		add_image_size('socialShareSmall', 120, 120, true);
-		add_image_size('socialShareBig', 400, 400, true);
+		add_image_size('smeSmall', 120, 120, true);
+		add_image_size('smeBig', 400, 400, true);
 
 		// i18n
 		load_plugin_textdomain('socialMediaEnhancer', false, 'socialMediaEnhancer/languages' );
@@ -124,6 +131,7 @@ class SocialMediaEnhancer {
 		$type        = 'website';
 		$url         = get_bloginfo('url');
 		$description = get_bloginfo('description');
+		$postImages  = $this->getPostImages($post);
 
 		// override in single view
 		if(is_singular()) {
@@ -131,68 +139,74 @@ class SocialMediaEnhancer {
 			$type        = 'article';
 			$url         = get_permalink($post->ID);
 			$moreTagPos  = strpos($post->post_content, '<!--more');
-			$description = substr($post->post_content, 0, $moreTagPos);
-			$description = strip_shortcodes($description);
+			$moreTagPos  = ($moreTagPos) ? $moreTagPos: 130;
 
+			// set description
+			$description = substr($post->post_content, 0, $moreTagPos);
+			$description = strip_shortcodes($description) . '…';
 			if($post->post_excerpt) {
 				$description = $post->post_excerpt;
 			}
 
-			if(function_exists('has_post_thumbnail') && has_post_thumbnail($post->ID)) {
-				$postImagesSizes = array('preview', 'large');
-				$images          = array();
-
-				foreach($postImagesSizes AS $size) {
-					$postImageData = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), $size);
-
-					if($postImage = esc_attr($postImageData[0])) {
-						$images[] = array(
-							'url'    => $postImage,
-							'width'  => $postImageData[1],
-							'height' => $postImageData[2]
-						);
-					}
-				}
-
-				// overwrite description on single image view
-				if(!is_page() && $post->post_parent != 0) {
-					$title        = trim(substr($post->post_content, 0, 70)) . '&#8230;';
-					$description  = $post->post_content;
-				}
+			// overwrite description on single image view
+			if(!is_page() && $post->post_parent != 0) {
+				$title        = trim(substr($post->post_content, 0, 70)) . '&#8230;';
+				$description  = $post->post_content;
 			}
-
-			// embedded youtube
-			$youtubeId = get_post_custom_values('youtube', false);
-			$youtubeId = $youtubeId[0];
 		}
 
-		if(!$image) {
+		if(!$images) {
 			if($headerImage = get_header_image()) {
 				$image = $headerImage;
 			} else {
-				$image = $this->pluginUrl . '/images/smeShare.png';
+				$image = $this->pluginUrl . '/assets/images/smeShare.png';
 			}
+
 		}
 
-		echo "\n\n\t" . '<meta property="og:title" content="' . strip_tags($title) . '">' . "\n\t";
+		echo "\n\n\t" . '<!--// This WordPress Blog is powered by SocialMediaEnhancer -->' . "\n\t";
+		echo '<meta property="og:title" content="' . strip_tags($title) . '">' . "\n\t";
 		echo '<meta property="og:type" content="' . $type . '">' . "\n\t";
 		echo '<meta property="og:url" content="' . $url . '">' . "\n\t";
 		echo '<meta property="og:site_name" content="' . $blogTitle . '">' . "\n\t";
 		echo '<meta property="og:description" content="' . strip_tags($description) . '">' . "\n\t";
-		if(!empty($images)) {
-			$n = 0;
-			foreach($images AS $image) {
-				echo '<meta property="og:image" content="' . $image['url'] . '">' . "\n\t";
-				echo '<meta property="og:image:width" content="' . $image['width'] . '">' . "\n\t";
-				echo '<meta property="og:image:height" content="' . $image['height'] . '">' . "\n\t";
 
-				if($n == 0) {
-					echo '<link rel="image_src" href="' . $image['url'] . '">' . "\n";
+		// author and publisher informations
+		if($this->options['accounts']['facebook']) {
+			echo '<meta property="article:publisher" content="' . $this->options['accounts']['facebook'] . '">' . "\n\t";
+		}
+		if($this->options['accounts']['google']) {
+			echo '<link href="' . $this->options['accounts']['google'] . '" rel="publisher">' . "\n\t";
+		}
+		if($this->options['accounts']['twitter']) {
+			echo '<meta name="twitter:site" content="@' . $this->options['accounts']['twitter'] . '">' . "\n\t";
+		}
+
+		if(!empty($postImages)) {
+			$n             = 0;
+			$postImageMain = false;
+
+			foreach($postImages AS $image) {
+				echo '<meta property="og:image" content="' . $image['url'] . '">' . "\n\t";
+				
+				if($image['width']) {
+					echo '<meta property="og:image:width" content="' . $image['width'] . '">' . "\n\t";
+				}
+				
+				if($image['height']) {
+					echo '<meta property="og:image:height" content="' . $image['height'] . '">' . "\n\t";
+				}
+
+				if(($n == 0) || ($image['name'] == 'smeSmall')) {
+					$postImageMain = $image['url'];
 				}
 				$n++;
 			}
-		} else {
-			echo '<link rel="image_src" href="' . $image . '">' . "\n";
+
+			if($postImageMain) {
+				echo '<link rel="image_src" href="' . $postImageMain . '">' . "\n\t";
+				$this->options['postImage'] = $postImageMain;				
+			}
 		}
 	}
 
@@ -219,15 +233,15 @@ class SocialMediaEnhancer {
 		$transientApiKey     = 'post' . $post->ID . '_socialInfo';
 		$connectionTimeout   = 3; // set your desired connection timeout for external API calls
 
-		// debug
-		if(isset($_GET['smeFlush']) && ($_GET['smeFlush'] == 'cache')) {
+		// refresh transient if the admin is forcing the debug mode
+		if($this->isDebugMode) {
 			delete_transient($transientApiKey);
 		}
 
 		// get saved data from wordpress transient api
 		// see: http://codex.wordpress.org/Transients_API
 
-		if($socialInfo = get_transient($transientApiKey)) {
+		if(($socialInfo = get_transient($transientApiKey) && ($this->isDebugMode == false))) {
 			$post->socialInfo = $socialInfo;
 		} else {
 			$cntComments = wp_count_comments($post->ID)->approved;
@@ -371,6 +385,7 @@ class SocialMediaEnhancer {
 
 			// get count data from pinterest
 			if($this->options['general']['services']['pinterest'] == 1) {
+				// get post image from post
 				$ch = curl_init();
 				curl_setopt_array($ch, array(
 					CURLOPT_URL            => 'http://api.pinterest.com/v1/urls/count.json?url=' . $permalinkUrl,
@@ -394,7 +409,7 @@ class SocialMediaEnhancer {
 
 				// setup pinterest button
 				// @2to add &media=thumbnail
-				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&description=' . $postExcerpt;
+				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&media=' . urlencode($this->options['postImages'][0]['url']) . '&description=' . $postExcerpt;
 			} else {
 				$socialInfo['pinterest']['count'] = intval(0);
 			}
@@ -442,6 +457,59 @@ class SocialMediaEnhancer {
 		return $post->socialInfo;
 	}
 
+	/**
+	 * get all attached images from a post
+	 * @param  object $post [the post object]
+	 * @return array        [image array]
+	 */
+	public function getPostImages($post = false) {
+		if($post == false) {
+			return false;
+		}
+
+		$postImagesSizes = array('smeSmall', 'smeBig', 'thumbnail', 'medium', 'large');
+		$images          = array();
+
+		// get the attached images
+		if(function_exists('has_post_thumbnail') && has_post_thumbnail($post->ID)) {
+			foreach($postImagesSizes AS $size) {
+				$postImageData = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), $size);
+
+				if(($postImageData[3] !== false) && ($postImage = esc_attr($postImageData[0]))) {
+					$images[] = array(
+						'name'   => $size,
+						'url'    => $postImage,
+						'width'  => $postImageData[1],
+						'height' => $postImageData[2]
+					);
+				}
+			}
+		}
+
+		$cntImages = count($images);
+
+		// if no images is attached, try to get the image header or fall back to default
+		if($cntImages < 1) {
+			if($postHeaderImage = get_header_image()) {
+				$images[] = array(
+					'name' => 'headerImage',
+					'url'  => $postHeaderImage
+				);
+			} else {
+				$images[] = array(
+					'name'   => 'default',
+					'url'    => $this->pluginUrl . '/assets/images/smeDefault.png',
+					'width'  => 300,
+					'height' => 300
+				);
+			}
+		}
+
+		$this->options['postImages'] = $images;
+
+		return $images;
+	}
+
 	public function addSocialButtons($content) {
 		global $post;
 
@@ -464,8 +532,8 @@ class SocialMediaEnhancer {
 	public function includeScripts() {
 		$pluginPath = $this->pluginUrl . '/assets/';
 
-		wp_enqueue_style('smeStyle', $pluginPath . 'sme.css', '', '1.0');
-		wp_enqueue_script('smeScript', $pluginPath . 'sme.js', array('jquery'), '1.0');
+		wp_enqueue_style('smeStyle', $pluginPath . 'css/sme.css', '', '1.0');
+		wp_enqueue_script('smeScript', $pluginPath . 'js/sme.js', array('jquery'), '1.0');
 	}
 
 	public function smeShortcode($attr, $content = '') {
@@ -542,5 +610,5 @@ function smeButtons($post = null) {
 	$sme        = new SocialMediaEnhancer();
 	$socialData = $sme->getSocialData($post);
 
-	include_once $sme->pluginPath . '/templates/socialButtons.php';
+	include $sme->pluginPath . '/templates/socialButtons.php';
 }
