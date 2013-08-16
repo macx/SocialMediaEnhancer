@@ -2,6 +2,8 @@
 
 Fetches social counts from Google+, Facebook, Twitter, LinkedIn and Pinterst and provide beautiful sharing buttons without the use of JavaScript
 
+![SocialMediaEnhancer](SocialMediaEnhancer/assets/images/smeDefault.png "SocialMediaEnhancer")
+
 ## Description
 
 The SocialMediaEnhancer (SME) provides beautiful styled and static social media sharing buttons for your WordPress blog. It fetches the social counts
