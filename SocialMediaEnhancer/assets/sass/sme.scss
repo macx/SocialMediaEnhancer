@@ -6,7 +6,7 @@
 ************************************************/
 
 .smeShare {
-	margin: 0 0 15px 0;
+	margin: 0 0 10px 0;
 	font-size: 12px;
 	line-height: 20px;
 	vertical-align: top;
@@ -107,6 +107,7 @@
 	font-weight: 300;
 	cursor: pointer;
 	vertical-align: baseline;
+	margin: 0 5px 5px 0;
 
 	-webkit-font-smoothing: antialiased;
 }
@@ -123,7 +124,6 @@ a[class*="smeFlat"] {
 [class*="smeBtn"] {
 	text-shadow: 0 1px 1px #fff;
 	line-height: 24px;
-	margin: 0 5px 0 0;
 	padding: 0 10px !important;
 	white-space: nowrap;
 
@@ -143,12 +143,13 @@ a[class*="smeFlat"] {
 	margin: 0;
 }
 
-[class~="smeBtn"]:hover,
-[class*="smeBtn"]:focus,
-[class^="smeBtn"]:hover,
-[class*="smeBtn"]:focus {
+a[class~="smeBtn"]:hover,
+a[class*="smeBtn"]:focus,
+a[class^="smeBtn"]:hover,
+a[class*="smeBtn"]:focus {
 	border-color: rgba(0, 0, 0, .5);
 	box-shadow: 0 0 8px rgba(0, 0, 0, .2);
+	color: $color-default;
 }
 
 [class^="smeBtn"]:active,
@@ -237,7 +238,6 @@ a[class*="smeFlat"] {
 [class*="smeFlat"] {
 	background-color: #eee;
 	padding: 5px 10px 4px;
-	margin: 0 5px 5px 0;
 	text-align: center;
 	min-width: 3.3em;
 	@include border-radius(2px);

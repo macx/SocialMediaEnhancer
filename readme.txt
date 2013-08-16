@@ -4,7 +4,7 @@ Donate link: http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE
 Tags: social, google+, facebook, twitter, linkedin, pinterest, buttons, counts, social media
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.8.3
+Stable tag: 1.8.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,20 @@ For a manual installation using FTP:
 4. Visit the options page in WordPress to setup it up for your needs.
 
 == Change Log ==
+
+=== 1.8.4 ===
+
+- New: Flat Design Buttons
+- New: Default Image if a post has no thumbnail
+- New: Optionen to display the Social Network name in a modern button
+- New: Debug Mode. Activate it by adding this to your URL: ?smeDebug=true
+- New: Using SASS/Compass to build the CSS
+- New: Support for Pinterst Image Sharing (using the post thumbnail)
+- New: Support for article:publisher (Facebook publisher relation)
+- New: Support for link rel="publisher" (Google+ publisher relation)
+- New: Support for meta twitter:site (Twitter publisher relation)
+- Anhanced: Better Post Image Detection
+- Fixed: Post Description is now used correctly
 
 === 1.8.3 ===
 
