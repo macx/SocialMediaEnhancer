@@ -8,7 +8,7 @@ Stable tag: 1.8.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Fetches social counts from Google+, Facebook, Twitter, LinkedIn and Pinterst and provide beautiful sharing buttons without the use of JavaScript
+Fetches social counts from Google+, Facebook, Twitter, LinkedIn, Pinterst and XING and provide beautiful sharing buttons without the use of JavaScript
 
 == Description ==
 

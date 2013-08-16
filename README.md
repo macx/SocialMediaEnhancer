@@ -1,6 +1,6 @@
 # SocialMediaEnhancer
 
-Fetches social counts from Google+, Facebook, Twitter, LinkedIn and Pinterst and provide beautiful sharing buttons without the use of JavaScript
+Fetches social counts from Google+, Facebook, Twitter, LinkedIn, Pinterst and XING and provide beautiful sharing buttons without the use of JavaScript
 
 ![SocialMediaEnhancer](SocialMediaEnhancer/assets/images/smeDefault.png "SocialMediaEnhancer")
 
