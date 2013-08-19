@@ -111,8 +111,8 @@ class SocialMediaEnhancer {
 
 	public function smeInit() {
 		// specific image sizes
-		add_image_size('smeSmall', 120, 120, true);
-		add_image_size('smeBig', 400, 400, true);
+		add_image_size('smeSmall', 300, 300, true);
+		add_image_size('smeBig', 600, 600, true);
 
 		// i18n
 		load_plugin_textdomain('SocialMediaEnhancer', get_template_directory() . '/languages');
