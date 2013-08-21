@@ -115,7 +115,11 @@
 a[class^="smeBtn"],
 a[class*="smeBtn"],
 a[class^="smeFlat"],
-a[class*="smeFlat"] {
+a[class*="smeFlat"],
+a[class^="smeBtn"]:visited,
+a[class*="smeBtn"]:visited,
+a[class^="smeFlat"]:visited,
+a[class*="smeFlat"]:visited {
 	color: #222;
 	text-decoration: none;
 }

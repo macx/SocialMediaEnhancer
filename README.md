@@ -34,6 +34,11 @@ For a manual installation using FTP:
 
 ## Change Log
 
+### 1.8.5
+
+- Fixed: Social Counts
+- Removed Photoshop files for faster updating
+
 ### 1.8.4
 
 - New: Flat Design Buttons

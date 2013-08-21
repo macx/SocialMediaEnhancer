@@ -4,7 +4,7 @@ Donate link: http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE
 Tags: social, google+, facebook, twitter, linkedin, pinterest, buttons, counts, social media
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.8.4
+Stable tag: 1.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,11 @@ For a manual installation using FTP:
 4. Visit the options page in WordPress to setup it up for your needs.
 
 == Change Log ==
+
+=== 1.8.5 ===
+
+- Fixed: Social Counts
+- Removed Photoshop files for faster updating
 
 === 1.8.4 ===
 

@@ -3,8 +3,8 @@
  * Plugin Name: SocialMediaEnhancer
  * Plugin URI: https://github.com/macx/SocialMediaEnhancer
  * Description: Smart social button integration and counter
- * Version: 1.8.4
- * Update: 2013-08-16
+ * Version: 1.8.5
+ * Update: 2013-08-21
  * Author: David Maciejewski
  * Author URI: http://macx.de/+
  * License: GPLv2 or later
@@ -115,7 +115,7 @@ class SocialMediaEnhancer {
 		add_image_size('smeBig', 400, 400, true);
 
 		// i18n
-		load_plugin_textdomain('SocialMediaEnhancer', get_template_directory() . '/languages');
+		// load_plugin_textdomain('SocialMediaEnhancer', get_template_directory() . '/languages');
 	}
 
 	public function smeOptionDefaults() {
@@ -220,7 +220,11 @@ class SocialMediaEnhancer {
 	* @param object $post
 	* @return void
 	*/
-	function getSocialData($post) {
+	function getSocialData($post = false) {
+		if($post === false) {
+			return false;
+		}
+
 		$twitterAccount      = $this->options['accounts']['twitter'];
 		$permalinkUrl        = get_permalink($post->ID);
 		$permalinkUrlEncoded = urlencode($permalinkUrl);
@@ -240,8 +244,9 @@ class SocialMediaEnhancer {
 
 		// get saved data from wordpress transient api
 		// see: http://codex.wordpress.org/Transients_API
+		$socialInfo = get_transient($transientApiKey);
 
-		if(($socialInfo = get_transient($transientApiKey) && ($this->isDebugMode == false))) {
+		if($socialInfo && ($this->isDebugMode == false)) {
 			$post->socialInfo = $socialInfo;
 		} else {
 			$cntComments = wp_count_comments($post->ID)->approved;
@@ -600,10 +605,10 @@ class SocialMediaEnhancer {
 	}
 }
 
-function smeButtons($post = null) {
-	if(preg_match('/^[0-9]+$/', $post)) {
-		$post = get_post($post);
-	} elseif($post == null) {
+function smeButtons($postId = null) {
+	if(preg_match('/^[0-9]+$/', $postId)) {
+		$post = get_post($postId);
+	} elseif($postId == null) {
 		return false;
 	}
 

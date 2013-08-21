@@ -48,7 +48,7 @@
 ************************************************/
 [class^="smeBtn"], [class*="smeBtn"], [class^="smeFlat"], [class*="smeFlat"] { display: -moz-inline-stack; display: inline-block; zoom: 1; *display: inline; font-family: 'Droid Sans',Arial,Helvetica,sans-serif; font-size: 12px; font-weight: 300; cursor: pointer; vertical-align: baseline; margin: 0 5px 5px 0; -webkit-font-smoothing: antialiased; }
 
-a[class^="smeBtn"], a[class*="smeBtn"], a[class^="smeFlat"], a[class*="smeFlat"] { color: #222; text-decoration: none; }
+a[class^="smeBtn"], a[class*="smeBtn"], a[class^="smeFlat"], a[class*="smeFlat"], a[class^="smeBtn"]:visited, a[class*="smeBtn"]:visited, a[class^="smeFlat"]:visited, a[class*="smeFlat"]:visited { color: #222; text-decoration: none; }
 
 [class^="smeBtn"], [class*="smeBtn"] { text-shadow: 0 1px 1px #fff; line-height: 24px; padding: 0 10px !important; white-space: nowrap; background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee)); background-image: -webkit-linear-gradient(#ffffff, #eeeeee); background-image: -moz-linear-gradient(#ffffff, #eeeeee); background-image: -o-linear-gradient(#ffffff, #eeeeee); background-image: linear-gradient(#ffffff, #eeeeee); border: solid 1px #bbb; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; -webkit-transition: border-color .218s; -moz-transition: border .218s; -o-transition: border-color .218s; transition: border-color .218s, bos-shadow .218s; }
 
