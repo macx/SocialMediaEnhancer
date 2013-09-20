@@ -11,7 +11,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
  *	Copyright 2011-2013 David Maciejewski (email : PLUGIN AUTHOR EMAIL)
-
+ *
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License, version 2, as
  *	published by the Free Software Foundation.
@@ -76,7 +76,12 @@ class SocialMediaEnhancer {
 				'opengraph' => array(
 					'disable' => 0
 				)
-			)
+			),
+      'accounts' => array(
+        'google' => '',
+        'facebook' => '',
+        'twitter' => ''
+      )
 		));
 
 		if($this->options['general']['embed'] != 'disabled') {
