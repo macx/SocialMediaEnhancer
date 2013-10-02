@@ -3,10 +3,10 @@
  * Plugin Name: SocialMediaEnhancer
  * Plugin URI: https://github.com/macx/SocialMediaEnhancer
  * Description: Smart social button integration and counter
- * Version: 1.8.5
- * Update: 2013-08-21
+ * Version: 1.8.6
+ * Update: 2013-10-02
  * Author: David Maciejewski
- * Author URI: http://macx.de/+
+ * Author URI: http://macx.de
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -77,14 +77,21 @@ class SocialMediaEnhancer {
 					'disable' => 0
 				)
 			),
-      'accounts' => array(
-        'google' => '',
-        'facebook' => '',
-        'twitter' => ''
-      )
+			'accounts' => array(
+				'google'    => '',
+				'facebook'  => '',
+				'twitter'   => '',
+				'linkedin'  => '',
+				'pinterest' => '',
+				'xing'      => '',
+			)
 		));
 
 		if($this->options['general']['embed'] != 'disabled') {
+			$this->postContentModified = array();
+
+			add_filter('the_excerpt', array(&$this, 'addSocialButtonsToExcerpt'));
+			add_filter('get_the_excerpt', array(&$this, 'addSocialButtonsToExcerpt'));
 			add_filter('the_content', array(&$this, 'addSocialButtons'));
 		}
 
@@ -257,7 +264,8 @@ class SocialMediaEnhancer {
 			$cntComments = wp_count_comments($post->ID)->approved;
 			$socialInfo  = array(
 				'comments' => $cntComments,
-				'total'    => $cntComments
+				'shares'   => 0,
+				'total'    => 0
 			);
 
 			// setup google +1 button
@@ -283,9 +291,9 @@ class SocialMediaEnhancer {
 					$socialInfo['google']['count'] = intval(0);
 				}
 
-				// increase total counter
+				// increase share counter
 				if($socialInfo['google']['count'] > 0) {
-					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['google']['count']);
+					$socialInfo['shares'] = abs($socialInfo['shares'] + $socialInfo['google']['count']);
 				}
 
 				// setup google +1 button
@@ -319,9 +327,9 @@ class SocialMediaEnhancer {
 					$twitterPostTitle = html_entity_decode($postTitle);
 				}
 
-				// increase total counter
+				// increase share counter
 				if($socialInfo['twitter']['count'] > 0) {
-					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['twitter']['count']);
+					$socialInfo['shares'] = abs($socialInfo['shares'] + $socialInfo['twitter']['count']);
 				}
 
 				$message                            = urlencode($twitterPostTitle);
@@ -351,13 +359,13 @@ class SocialMediaEnhancer {
 					$socialInfo['facebook']['count'] = intval(0);
 				}
 
-				// increase total counter
+				// increase share counter
 				if($socialInfo['facebook']['count'] > 0) {
-					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['facebook']['count']);
+					$socialInfo['shares'] = abs($socialInfo['shares'] + $socialInfo['facebook']['count']);
 				}
 
 				// setup facebook
-				$socialInfo['facebook']['shareUrl'] = 'http://www.facebook.com/sharer.php?u=' . $permalinkUrl . '&t=' . urlencode($postTitle);
+				$socialInfo['facebook']['shareUrl'] = 'http://www.facebook.com/sharer.php?u=' . $permalinkUrl . '&amp;t=' . urlencode($postTitle);
 			} else {
 				$socialInfo['facebook']['count'] = intval(0);
 			}
@@ -366,7 +374,7 @@ class SocialMediaEnhancer {
 			if($this->options['general']['services']['linkedin'] == 1) {
 				$ch = curl_init();
 				curl_setopt_array($ch, array(
-					CURLOPT_URL            => 'http://www.linkedin.com/countserv/count/share?url=' . $permalinkUrl . '&format=json',
+					CURLOPT_URL            => 'http://www.linkedin.com/countserv/count/share?url=' . $permalinkUrl . '&amp;format=json',
 					CURLOPT_RETURNTRANSFER => true,
 					CURLOPT_TIMEOUT        => $connectionTimeout,
 					CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
@@ -380,15 +388,15 @@ class SocialMediaEnhancer {
 					$socialInfo['linkedin']['count'] = intval(0);
 				}
 
-				// increase total counter
+				// increase share counter
 				if($socialInfo['linkedin']['count'] > 0) {
-					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['linkedin']['count']);
+					$socialInfo['shares'] = abs($socialInfo['shares'] + $socialInfo['linkedin']['count']);
 				}
 
 				// setup linkedin button
 				// @see https://developer.linkedin.com/documents/share-linkedin
 				// @todo add &source=blog_title
-				$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&url=' . $permalinkUrlEncoded . '&title=' . $postTitleEncoded . '&summary=' . $postExcerpt;
+				$socialInfo['linkedin']['shareUrl'] = 'http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $permalinkUrlEncoded . '&amp;title=' . $postTitleEncoded . '&amp;summary=' . $postExcerpt;
 			} else {
 				$socialInfo['linkedin']['count'] = intval(0);
 			}
@@ -412,14 +420,14 @@ class SocialMediaEnhancer {
 					$socialInfo['pinterest']['count'] = intval(0);
 				}
 
-				// increase total counter
+				// increase share counter
 				if($socialInfo['pinterest']['count'] > 0) {
-					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['pinterest']['count']);
+					$socialInfo['shares'] = abs($socialInfo['shares'] + $socialInfo['pinterest']['count']);
 				}
 
 				// setup pinterest button
 				// @2to add &media=thumbnail
-				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&media=' . urlencode($this->options['postImages'][0]['url']) . '&description=' . $postExcerpt;
+				$socialInfo['pinterest']['shareUrl'] = 'http://pinterest.com/pin/create/button/?url=' . $permalinkUrlEncoded . '&amp;media=' . urlencode($this->options['postImages'][0]['url']) . '&amp;description=' . $postExcerpt;
 			} else {
 				$socialInfo['pinterest']['count'] = intval(0);
 			}
@@ -446,9 +454,9 @@ class SocialMediaEnhancer {
 					$socialInfo['xing']['count'] = intval(0);
 				}
 
-				// increase total counter
+				// increase share counter
 				if($socialInfo['xing']['count'] > 0) {
-					$socialInfo['total'] = abs($socialInfo['total'] + $socialInfo['xing']['count']);
+					$socialInfo['shares'] = abs($socialInfo['shares'] + $socialInfo['xing']['count']);
 				}
 
 				// setup xing button
@@ -456,6 +464,9 @@ class SocialMediaEnhancer {
 			} else {
 				$socialInfo['xing']['count'] = intval(0);
 			}
+
+			// count total shares and comments
+			$socialInfo['total'] = abs($socialInfo['comments'] + $socialInfo['shares']);
 
 			// attach results to $post object
 			$post->socialInfo = $socialInfo;
@@ -520,19 +531,36 @@ class SocialMediaEnhancer {
 		return $images;
 	}
 
-	public function addSocialButtons($content) {
+	public function addSocialButtonsToExcerpt($content = '') {
 		global $post;
 
-		if($this->options['general']['embed'] != 'disabled') {
-			ob_start();
-			include 'templates/socialButtons.php';
-			$socialBar = ob_get_contents();
-			ob_end_clean();
+		unset($this->postContentModified[$post->ID]);
+		$content = $this->addSocialButtons($content, true);
 
-			if($this->options['general']['embed'] == 'end') {
-				$content = $content . $socialBar;
+		return $content;
+	}
+
+	public function addSocialButtons($content = '', $isExcerpt = false) {
+		global $post;
+
+		if(!isset($post->socialInfo) || ($this->options['general']['embed'] == 'disabled') || isset($this->postContentModified[$post->ID]) || (($isExcerpt == false) && ($this->options['general']['embed'] == 'begin'))) {
+			return $content;
+		}
+
+		// get the button template
+		ob_start();
+		include 'templates/socialButtons.php';
+		$smeButtons = ob_get_contents();
+		ob_end_clean();
+
+		if($this->options['general']['embed'] == 'begin') {
+			$content = $smeButtons . $content;
+			$this->postContentModified[$post->ID] = true;
+		} else {
+			if(is_singular() && $isExcerpt) {
 			} else {
-				$content = $socialBar . $content;
+				$content = $content . $smeButtons;
+				$this->postContentModified[$post->ID] = true;
 			}
 		}
 
@@ -543,7 +571,7 @@ class SocialMediaEnhancer {
 		$pluginPath = $this->pluginUrl . '/assets/';
 
 		wp_enqueue_style('smeStyle', $pluginPath . 'css/sme.css', '', '1.1');
-		wp_enqueue_script('smeScript', $pluginPath . 'js/sme.js', array('jquery'), '1.1');
+		wp_enqueue_script('smeScript', $pluginPath . 'js/sme.js', array('jquery'), '1.2');
 	}
 
 	public function smeShortcode($attr, $content = '') {

@@ -34,6 +34,12 @@ For a manual installation using FTP:
 
 ## Change Log
 
+### 1.8.6
+
+- New: $post->socialInfo['shares'] shows the social shares without the comments on the blog post which is included in $post->socialInfo['shares'] (#30)
+- Fixed: Prevent Warnings (#31)
+- Fixed: Worked now properly with excerpt text (#24)
+
 ### 1.8.5
 
 - Fixed: Social Counts

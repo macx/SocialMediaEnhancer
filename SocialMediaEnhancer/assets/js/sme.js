@@ -9,7 +9,7 @@
 				service     = link.data('service'),
 				smeServices = {
 					google: {
-						site:   'Google',
+						site:   'Google+',
 						action: '+1'
 					},
 					twitter: {
@@ -18,6 +18,14 @@
 					},
 					facebook: {
 						site:   'Facebook',
+						action: 'share'
+					},
+					linkedin: {
+						site:   'linkedIn',
+						action: 'share'
+					},
+					pinterest: {
+						site:   'Pinterest',
 						action: 'share'
 					},
 					xing: {
