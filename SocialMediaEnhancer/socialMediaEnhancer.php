@@ -11,7 +11,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
  *	Copyright 2011-2013 David Maciejewski (email : PLUGIN AUTHOR EMAIL)
-
+ *
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License, version 2, as
  *	published by the Free Software Foundation.
@@ -76,7 +76,12 @@ class SocialMediaEnhancer {
 				'opengraph' => array(
 					'disable' => 0
 				)
-			)
+			),
+      'accounts' => array(
+        'google' => '',
+        'facebook' => '',
+        'twitter' => ''
+      )
 		));
 
 		if($this->options['general']['embed'] != 'disabled') {
@@ -155,11 +160,11 @@ class SocialMediaEnhancer {
 			}
 		}
 
-		if(!$images) {
+		if(!$postImages) {
 			if($headerImage = get_header_image()) {
-				$image = $headerImage;
+				$postImages[] = $headerImage;
 			} else {
-				$image = $this->pluginUrl . '/assets/images/smeShare.png';
+				$postImages[] = $this->pluginUrl . '/assets/images/smeShare.png';
 			}
 
 		}
@@ -189,11 +194,11 @@ class SocialMediaEnhancer {
 			foreach($postImages AS $image) {
 				echo '<meta property="og:image" content="' . $image['url'] . '">' . "\n\t";
 				
-				if($image['width']) {
+				if(isset($image['width'])) {
 					echo '<meta property="og:image:width" content="' . $image['width'] . '">' . "\n\t";
 				}
 				
-				if($image['height']) {
+				if(isset($image['height'])) {
 					echo '<meta property="og:image:height" content="' . $image['height'] . '">' . "\n\t";
 				}
 
