@@ -34,6 +34,8 @@ For a manual installation using FTP:
 
 ## Change Log
 
+Version 2.0 in development!
+
 ### 1.8.6
 
 - New: $post->socialInfo['shares'] shows the social shares without the comments on the blog post which is included in $post->socialInfo['shares'] (#30)
@@ -81,6 +83,6 @@ Initial Tracking of changes
 
 ## Licence
 
-Copyright 2012-2013 David Macieewski
+Copyright 2012-2013 David Maciejewski
 
 GPLv2 or later <http://www.gnu.org/licenses/gpl-2.0.html>
