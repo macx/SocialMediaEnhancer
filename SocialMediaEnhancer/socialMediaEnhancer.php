@@ -585,7 +585,7 @@ class SocialMediaEnhancer {
 		), $attr));
 
 		ob_start();
-		include 'templates/socialShare.php';
+		include 'templates/socialButtons.php';
 		$buttons = ob_get_contents();
 		$output  = "\n" . $buttons . "\n";
 		ob_end_clean();
