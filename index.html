@@ -1,77 +1,142 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset='utf-8'>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>SocialMediaEnhancer by macx</title>
 
-  <title>macx/SocialDataGrabber @ GitHub</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>SocialMediaEnhancer</h1>
+        <p>WordPress Plugin to enhance your WordPress blog with well formed informations for Facebook, Twitter and Google+ using the Open Graph Protocol (OGP) and sharing functions without the use of external JavaScript.</p>
 
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #6fa9de;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #905621; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #905621; }
-    h3 { text-align: center; color: #905621; }
-    a { color: #905621; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
-</head>
+        <p class="view"><a href="https://github.com/macx/SocialMediaEnhancer">View the Project on GitHub <small>macx/SocialMediaEnhancer</small></a></p>
 
-<body>
-  <a href="http://github.com/macx/SocialDataGrabber"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-  <div id="container">
+        <ul>
+          <li><a href="https://github.com/macx/SocialMediaEnhancer/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/macx/SocialMediaEnhancer/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/macx/SocialMediaEnhancer">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="socialmediaenhancer" class="anchor" href="#socialmediaenhancer"><span class="octicon octicon-link"></span></a>SocialMediaEnhancer</h1>
 
-    <div class="download">
-      <a href="http://github.com/macx/SocialDataGrabber/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/macx/SocialDataGrabber/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+<p>Fetches social counts from Google+, Facebook, Twitter, LinkedIn, Pinterst and XING and provide beautiful sharing buttons without the use of JavaScript</p>
+
+<p><img src="SocialMediaEnhancer/assets/images/smeDefault.png" alt="SocialMediaEnhancer" title="SocialMediaEnhancer"></p>
+
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
+
+<p>The SocialMediaEnhancer (SME) provides beautiful styled and static social media sharing buttons for your WordPress blog. It fetches the social counts
+(share activities) from Google+, Facebook, Twitter, LinkedIn and Pinterst in the background without the use of performance critital JavaScript
+from the social networks.</p>
+
+<p>To provide a optimal presentation of your post at the social networks after sharing, the SME is using the Open Graph Protocol (OGP) to include
+well formatted meta elements on every post.</p>
+
+<p>Choose a style for the buttons and decide which network do you want to use.</p>
+
+<p>Donate-Link: <a href="http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE">http://www.amazon.de/registry/wishlist/2NJSSK0DMFEQE</a></p>
+
+<h3>
+<a name="feedback" class="anchor" href="#feedback"><span class="octicon octicon-link"></span></a>Feedback</h3>
+
+<p>Please send me feedback if you have questions or new ideas on <a href="https://plus.google.com/102458928073783517690?rel=author">Google+</a> or <a href="https://twitter.com/macx">Twitter</a>.</p>
+
+<p>Thanks to MrFloppy for the XING support</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>For a manual installation using FTP:</p>
+
+<ol>
+<li>Download the zip and extract it.</li>
+<li>Upload the directory <code>SocialMediaEnhancer</code> to your WordPress Blog plugin folder at <code>/wp-content/plugins</code>.</li>
+<li>Activate this Plugin in the WordPress-Backend through the 'Plugins' screen.</li>
+<li>Visit the options page in WordPress to setup it up for your needs.</li>
+</ol><h2>
+<a name="change-log" class="anchor" href="#change-log"><span class="octicon octicon-link"></span></a>Change Log</h2>
+
+<p>Version 2.0 in development!</p>
+
+<h3>
+<a name="186" class="anchor" href="#186"><span class="octicon octicon-link"></span></a>1.8.6</h3>
+
+<ul>
+<li>New: $post-&gt;socialInfo['shares'] shows the social shares without the comments on the blog post which is included in $post-&gt;socialInfo<a href="#30">'shares'</a>
+</li>
+<li>Fixed: Prevent Warnings (#31)</li>
+<li>Fixed: Worked now properly with excerpt text (#24)</li>
+</ul><h3>
+<a name="185" class="anchor" href="#185"><span class="octicon octicon-link"></span></a>1.8.5</h3>
+
+<ul>
+<li>Fixed: Social Counts</li>
+<li>Removed Photoshop files for faster updating</li>
+</ul><h3>
+<a name="184" class="anchor" href="#184"><span class="octicon octicon-link"></span></a>1.8.4</h3>
+
+<ul>
+<li>New: Flat Design Buttons</li>
+<li>New: Default Image if a post has no thumbnail</li>
+<li>New: Optionen to display the Social Network name in a modern button</li>
+<li>New: Debug Mode. Activate it by adding this to your URL: ?smeDebug=true</li>
+<li>New: Using SASS/Compass to build the CSS</li>
+<li>New: Support for Pinterst Image Sharing (using the post thumbnail)</li>
+<li>New: Support for article:publisher (Facebook publisher relation)</li>
+<li>New: Support for link rel="publisher" (Google+ publisher relation)</li>
+<li>New: Support for meta twitter:site (Twitter publisher relation)</li>
+<li>Anhanced: Better Post Image Detection</li>
+<li>Fixed: Post Description is now used correctly</li>
+</ul><h3>
+<a name="183" class="anchor" href="#183"><span class="octicon octicon-link"></span></a>1.8.3</h3>
+
+<ul>
+<li>added XING-Button in Style "button"</li>
+<li>external function to call sme staticly. Use &lt;?php echo smeButtons(get_the_ID()); ?&gt;</li>
+<li>function to disble open graph meta data</li>
+</ul><h3>
+<a name="182" class="anchor" href="#182"><span class="octicon octicon-link"></span></a>1.8.2</h3>
+
+<ul>
+<li>added tracking of XING counts (by MrFloppy)</li>
+<li>added option to turn on XING support</li>
+<li>update icons for Google+, Facebook, Twitter</li>
+</ul><h3>
+<a name="181" class="anchor" href="#181"><span class="octicon octicon-link"></span></a>1.8.1</h3>
+
+<p>Initial Tracking of changes</p>
+
+<h2>
+<a name="planned-updates" class="anchor" href="#planned-updates"><span class="octicon octicon-link"></span></a>Planned updates</h2>
+
+<ul>
+<li>full support of LinkedIn, Pinterest and XING with sharing buttons</li>
+</ul><h2>
+<a name="licence" class="anchor" href="#licence"><span class="octicon octicon-link"></span></a>Licence</h2>
+
+<p>Copyright 2012-2013 David Maciejewski</p>
+
+<p>GPLv2 or later <a href="http://www.gnu.org/licenses/gpl-2.0.html">http://www.gnu.org/licenses/gpl-2.0.html</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/macx">macx</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-
-    <h1><a href="http://github.com/macx/SocialDataGrabber">SocialDataGrabber</a>
-      <span class="small">by <a href="http://github.com/macx">macx</a></span></h1>
-
-    <div class="description">
-      Small WordPress function to get social data count from a specific post from twitter, facebook and google +1 (plus one). Including wordpress internal caching method. Please fork it!
-    </div>
-
-    <h2>Authors</h2>
-<p>macx (com@macx.de)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>David Maciejewski (com@macx.de)<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/macx/SocialDataGrabber/zipball/master">zip</a> or
-      <a href="http://github.com/macx/SocialDataGrabber/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/macx/SocialDataGrabber</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/macx/SocialDataGrabber">macx/SocialDataGrabber</a>
-    </div>
-
-  </div>
-
-  
-</body>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
 </html>
