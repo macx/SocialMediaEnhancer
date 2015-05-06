@@ -86,3 +86,7 @@ Initial Tracking of changes
 Copyright 2012-2013 David Maciejewski
 
 GPLv2 or later <http://www.gnu.org/licenses/gpl-2.0.html>
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/macx/socialmediaenhancer/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
